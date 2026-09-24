@@ -65,8 +65,8 @@ Namespace Services
                                         context.CalculatedTax)
 
             auditLog.Record(AuditEventType.CalculationCompleted,
-                            $"Calculation completed: taxable income {AuditFormat.Amount(result.TaxableIncome)}, " &
-                            $"calculated tax {AuditFormat.Amount(result.CalculatedTax)}")
+                            $"Calculation completed: taxable income {DisplayFormat.Amount(result.TaxableIncome)}, " &
+                            $"calculated tax {DisplayFormat.Amount(result.CalculatedTax)}")
 
             Return CalculationOutcome.Succeeded(taxCase, validation, result, context.BracketTaxes, auditLog.Entries)
         End Function
