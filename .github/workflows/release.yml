@@ -116,6 +116,6 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
         run: |
           gh release create "$TAG" publish/*.zip \
-            --title "JalaTax ${VERSION}" \
+            --title "${VERSION}" \
             --notes-file release-notes.md \
             --target "$GITHUB_SHA"

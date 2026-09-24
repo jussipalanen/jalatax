@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Changed
+
+- GitHub Releases are named with the version number only, for example `1.0.0`.
+
 ## [1.0.0] - 2026-09-24
 
 First release.
