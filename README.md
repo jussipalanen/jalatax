@@ -6,16 +6,36 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-In progress. The solution structure, code standards, domain models, configuration loading and input validation are in place. The tax calculation, the audit trail and the Windows Forms application are not implemented yet.
+In progress. The solution structure, code standards, domain models, configuration loading, input validation and the tax calculation are in place. The audit trail and the Windows Forms application are not implemented yet.
 
 ## Calculation rules
 
-These are the agreed rules for the fictional calculation. The domain models describe them; the calculation itself arrives in a later phase.
+The fictional calculation follows these rules:
 
 1. **Taxable income** = annual income − the case's deductions − the configured basic deduction, and never below 0.
 2. **Progressive brackets:** each bracket's rate applies only to the part of taxable income inside that bracket. With the example brackets (0–20,000 at 10 %, 20,000–50,000 at 20 %, 50,000+ at 30 %), a taxable income of 42,500 is taxed 20,000 × 10 % + 22,500 × 20 % = 6,500.
 3. **Bracket boundaries** include the lower bound and exclude the upper bound, so exactly 20,000 falls in the 20,000–50,000 bracket. The top bracket has no upper bound.
 4. **Rounding:** amounts use `Decimal`, and the calculated tax is rounded to 2 decimals with halves rounded away from zero.
+
+### How the rules are processed
+
+`TaxCalculationService` handles one case at a time:
+
+1. `TaxCaseValidator` checks the case. If it is invalid, the service returns the validation errors and does not calculate.
+2. The rules run in order, sharing a `TaxCalculationContext`:
+   - `DeductionRule` calculates taxable income (rule 1).
+   - `TaxBracketRule` taxes each bracket's part and rounds the total (rules 2–4). It also records the tax per bracket.
+3. The service returns a `CalculationOutcome` with the `TaxResult`, the tax per bracket and the validation result.
+
+Each rule implements `ITaxRule` and can be tested on its own. The rules read all amounts from `data/rules.json`; no rates or limits are hard-coded.
+
+Results for the example cases:
+
+| Case | Income | Deductions | Basic deduction | Taxable income | Tax |
+|---|---:|---:|---:|---:|---:|
+| DEMO-001 | 45,000 | 2,500 | 3,000 | 39,500 | 20,000 × 10 % + 19,500 × 20 % = **5,900** |
+| DEMO-002 | 68,000 | 1,200 | 3,000 | 63,800 | 2,000 + 6,000 + 13,800 × 30 % = **12,140** |
+| DEMO-003 | 30,000 | −500 | – | – | Rejected: deductions must not be negative |
 
 ## Configuration
 
