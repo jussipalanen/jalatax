@@ -1,5 +1,6 @@
 Imports JalaTax.Core.Audit
 Imports JalaTax.Core.Configuration
+Imports JalaTax.Core.Localization
 Imports JalaTax.Core.Models
 Imports JalaTax.Core.Rules
 Imports JalaTax.Core.Validation
@@ -29,7 +30,7 @@ Namespace Services
             Dim configurationCheck = New TaxRuleConfigurationValidator().Validate(configuration)
             If Not configurationCheck.IsValid Then
                 Dim messages = configurationCheck.Errors.Select(Function(problem) problem.Message).ToList()
-                Throw New ConfigurationException("Configuration is invalid.", messages)
+                Throw New ConfigurationException(CoreText.Get("Config_Invalid"), messages)
             End If
 
             _configuration = configuration
@@ -40,17 +41,17 @@ Namespace Services
             ArgumentNullException.ThrowIfNull(taxCase)
 
             Dim auditLog As New AuditLog(_timeProvider)
-            auditLog.Record(AuditEventType.CaseLoaded, $"Tax case {DescribeCase(taxCase)} loaded")
+            auditLog.Record(AuditEventType.CaseLoaded, CoreText.Get("Audit_CaseLoaded", DescribeCase(taxCase)))
 
             Dim validation = _validator.Validate(taxCase)
             If Not validation.IsValid Then
                 For Each problem In validation.Errors
-                    auditLog.Record(AuditEventType.ValidationFailed, $"Validation failed: {problem.Message}")
+                    auditLog.Record(AuditEventType.ValidationFailed, CoreText.Get("Audit_ValidationFailed", problem.Message))
                 Next
                 Return CalculationOutcome.Rejected(taxCase, validation, auditLog.Entries)
             End If
 
-            auditLog.Record(AuditEventType.ValidationPassed, "Income and deductions validated")
+            auditLog.Record(AuditEventType.ValidationPassed, CoreText.Get("Audit_ValidationPassed"))
 
             Dim context As New TaxCalculationContext(taxCase, _configuration, auditLog)
             For Each rule In _rules
@@ -65,14 +66,15 @@ Namespace Services
                                         context.CalculatedTax)
 
             auditLog.Record(AuditEventType.CalculationCompleted,
-                            $"Calculation completed: taxable income {DisplayFormat.Amount(result.TaxableIncome)}, " &
-                            $"calculated tax {DisplayFormat.Amount(result.CalculatedTax)}")
+                            CoreText.Get("Audit_CalculationCompleted",
+                                         DisplayFormat.Amount(result.TaxableIncome),
+                                         DisplayFormat.Amount(result.CalculatedTax)))
 
             Return CalculationOutcome.Succeeded(taxCase, validation, result, context.BracketTaxes, auditLog.Entries)
         End Function
 
         Private Shared Function DescribeCase(taxCase As TaxCase) As String
-            Return If(String.IsNullOrWhiteSpace(taxCase.TaxpayerId), "(no taxpayer ID)", taxCase.TaxpayerId)
+            Return If(String.IsNullOrWhiteSpace(taxCase.TaxpayerId), CoreText.Get("Audit_NoTaxpayerId"), taxCase.TaxpayerId)
         End Function
 
     End Class

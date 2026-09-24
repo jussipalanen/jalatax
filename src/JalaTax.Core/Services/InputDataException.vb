@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Localization
 Namespace Services
 
     ''' <summary>
@@ -8,7 +9,7 @@ Namespace Services
         Inherits Exception
 
         Public Sub New()
-            MyBase.New("The tax case input data is invalid.")
+            MyBase.New(CoreText.Get("InputData_Invalid"))
         End Sub
 
         Public Sub New(message As String)

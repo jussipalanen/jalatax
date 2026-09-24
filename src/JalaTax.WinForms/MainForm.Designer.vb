@@ -48,6 +48,9 @@ Partial Class MainForm
         Me.AuditDescriptionColumn = New System.Windows.Forms.ColumnHeader()
         Me.MainStatusStrip = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.LanguageDropDownButton = New System.Windows.Forms.ToolStripDropDownButton()
+        Me.FinnishMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.EnglishMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.InputErrorProvider = New System.Windows.Forms.ErrorProvider(Me.components)
         Me.CaseGroupBox.SuspendLayout()
         Me.ResultGroupBox.SuspendLayout()
@@ -263,7 +266,7 @@ Partial Class MainForm
         '
         'MainStatusStrip
         '
-        Me.MainStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel})
+        Me.MainStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.LanguageDropDownButton})
         Me.MainStatusStrip.Location = New System.Drawing.Point(0, 614)
         Me.MainStatusStrip.Name = "MainStatusStrip"
         Me.MainStatusStrip.Size = New System.Drawing.Size(920, 22)
@@ -272,7 +275,29 @@ Partial Class MainForm
         'StatusLabel
         '
         Me.StatusLabel.Name = "StatusLabel"
-        Me.StatusLabel.Size = New System.Drawing.Size(0, 17)
+        Me.StatusLabel.Size = New System.Drawing.Size(789, 17)
+        Me.StatusLabel.Spring = True
+        Me.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'LanguageDropDownButton
+        '
+        Me.LanguageDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.LanguageDropDownButton.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FinnishMenuItem, Me.EnglishMenuItem})
+        Me.LanguageDropDownButton.Name = "LanguageDropDownButton"
+        Me.LanguageDropDownButton.Size = New System.Drawing.Size(116, 20)
+        Me.LanguageDropDownButton.Text = "Language: English"
+        '
+        'FinnishMenuItem
+        '
+        Me.FinnishMenuItem.Name = "FinnishMenuItem"
+        Me.FinnishMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.FinnishMenuItem.Text = "Suomi"
+        '
+        'EnglishMenuItem
+        '
+        Me.EnglishMenuItem.Name = "EnglishMenuItem"
+        Me.EnglishMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.EnglishMenuItem.Text = "English"
         '
         'InputErrorProvider
         '
@@ -331,5 +356,8 @@ Partial Class MainForm
     Friend WithEvents AuditDescriptionColumn As System.Windows.Forms.ColumnHeader
     Friend WithEvents MainStatusStrip As System.Windows.Forms.StatusStrip
     Friend WithEvents StatusLabel As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents LanguageDropDownButton As System.Windows.Forms.ToolStripDropDownButton
+    Friend WithEvents FinnishMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents EnglishMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents InputErrorProvider As System.Windows.Forms.ErrorProvider
 End Class

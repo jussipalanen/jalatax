@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Localization
 Imports JalaTax.Core.Validation
 
 Namespace Configuration
@@ -13,7 +14,7 @@ Namespace Configuration
             Dim result As New ValidationResult()
 
             If configuration.BasicDeduction < 0D Then
-                result.AddError(NameOf(TaxRuleConfiguration.BasicDeduction), "Basic deduction must not be negative.")
+                result.AddError(NameOf(TaxRuleConfiguration.BasicDeduction), CoreText.Get("Config_BasicDeductionNegative"))
             End If
 
             ValidateBrackets(configuration.TaxBrackets, result)
@@ -23,17 +24,17 @@ Namespace Configuration
 
         Private Shared Sub ValidateBrackets(brackets As List(Of TaxBracket), result As ValidationResult)
             If brackets Is Nothing OrElse brackets.Count = 0 Then
-                result.AddError(NameOf(TaxRuleConfiguration.TaxBrackets), "At least one tax bracket is required.")
+                result.AddError(NameOf(TaxRuleConfiguration.TaxBrackets), CoreText.Get("Config_NoBrackets"))
                 Return
             End If
 
             If brackets.Any(Function(bracket) bracket Is Nothing) Then
-                result.AddError(NameOf(TaxRuleConfiguration.TaxBrackets), "Tax brackets must not contain empty entries.")
+                result.AddError(NameOf(TaxRuleConfiguration.TaxBrackets), CoreText.Get("Config_EmptyBracket"))
                 Return
             End If
 
             If brackets(0).Min <> 0D Then
-                result.AddError(BracketPath(0, NameOf(TaxBracket.Min)), "Tax bracket 1: min must be 0 so that all income is covered.")
+                result.AddError(BracketPath(0, NameOf(TaxBracket.Min)), CoreText.Get("Config_FirstBracketMin"))
             End If
 
             For index = 0 To brackets.Count - 1
@@ -48,29 +49,29 @@ Namespace Configuration
 
             If bracket.Rate < 0D OrElse bracket.Rate > 1D Then
                 result.AddError(BracketPath(index, NameOf(TaxBracket.Rate)),
-                                $"Tax bracket {bracketNumber}: rate must be between 0 and 1.")
+                                CoreText.Get("Config_RateOutOfRange", bracketNumber))
             End If
 
             If bracket.Max.HasValue AndAlso bracket.Max.Value <= bracket.Min Then
                 result.AddError(BracketPath(index, NameOf(TaxBracket.Max)),
-                                $"Tax bracket {bracketNumber}: max must be greater than min.")
+                                CoreText.Get("Config_MaxNotGreaterThanMin", bracketNumber))
             End If
 
             If isLast AndAlso bracket.Max.HasValue Then
                 result.AddError(BracketPath(index, NameOf(TaxBracket.Max)),
-                                $"Tax bracket {bracketNumber}: the last bracket must not have a max, so that all income is covered.")
+                                CoreText.Get("Config_LastBracketHasMax", bracketNumber))
             End If
 
             If Not isLast AndAlso Not bracket.Max.HasValue Then
                 result.AddError(BracketPath(index, NameOf(TaxBracket.Max)),
-                                $"Tax bracket {bracketNumber}: only the last bracket may omit max.")
+                                CoreText.Get("Config_OnlyLastBracketOpen", bracketNumber))
             End If
 
             If index > 0 Then
                 Dim previousMax = brackets(index - 1).Max
                 If previousMax.HasValue AndAlso bracket.Min <> previousMax.Value Then
                     result.AddError(BracketPath(index, NameOf(TaxBracket.Min)),
-                                    $"Tax bracket {bracketNumber}: min must equal the previous bracket's max ({previousMax.Value}) so that brackets have no gaps or overlaps.")
+                                    CoreText.Get("Config_BracketGap", bracketNumber, DisplayFormat.Amount(previousMax.Value)))
                 End If
             End If
         End Sub

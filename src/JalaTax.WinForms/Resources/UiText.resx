@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Form_Title" xml:space="preserve">
+    <value>JalaTax – fictional tax calculation demo</value>
+  </data>
+  <data name="Group_Case" xml:space="preserve">
+    <value>Tax case</value>
+  </data>
+  <data name="Group_Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="Group_Audit" xml:space="preserve">
+    <value>Audit trail</value>
+  </data>
+  <data name="Label_ExampleCase" xml:space="preserve">
+    <value>Example case:</value>
+  </data>
+  <data name="Button_Calculate" xml:space="preserve">
+    <value>&amp;Calculate</value>
+  </data>
+  <data name="Button_Clear" xml:space="preserve">
+    <value>C&amp;lear</value>
+  </data>
+  <data name="Button_About" xml:space="preserve">
+    <value>&amp;About</value>
+  </data>
+  <data name="Column_Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="Column_Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Column_Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Column_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="Column_Rule" xml:space="preserve">
+    <value>Rule</value>
+  </data>
+  <data name="Column_Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Language_Selector" xml:space="preserve">
+    <value>Language: {0}</value>
+  </data>
+  <data name="Status_RulesLoaded" xml:space="preserve">
+    <value>Rules loaded from data\rules.json. All tax rules are fictional.</value>
+  </data>
+  <data name="Status_ConfigError" xml:space="preserve">
+    <value>Configuration error: calculation is disabled.</value>
+  </data>
+  <data name="Status_CasesNotLoaded" xml:space="preserve">
+    <value>Example cases could not be loaded: {0}</value>
+  </data>
+  <data name="Status_Calculated" xml:space="preserve">
+    <value>Case {0} calculated.</value>
+  </data>
+  <data name="Status_Rejected" xml:space="preserve">
+    <value>Case rejected. Correct the highlighted fields.</value>
+  </data>
+  <data name="Title_ConfigError" xml:space="preserve">
+    <value>Configuration error</value>
+  </data>
+  <data name="Message_EnterNumber" xml:space="preserve">
+    <value>Enter a number.</value>
+  </data>
+  <data name="Message_AmountsAsNumbers" xml:space="preserve">
+    <value>Enter amounts as numbers, for example 45000.</value>
+  </data>
+  <data name="About_Title" xml:space="preserve">
+    <value>About {0}</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="About_Description" xml:space="preserve">
+    <value>A VB.NET demo of configurable business rules, validation and auditability.</value>
+  </data>
+  <data name="About_Fictional" xml:space="preserve">
+    <value>All tax rules and data are fictional.</value>
+  </data>
+  <data name="Error_Unexpected" xml:space="preserve">
+    <value>An unexpected error occurred:</value>
+  </data>
+  <data name="Error_InvalidLanguageOption" xml:space="preserve">
+    <value>{0} The default language (Finnish) is used.</value>
+  </data>
+</root>
