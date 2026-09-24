@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Audit
 Imports JalaTax.Core.Configuration
 Imports JalaTax.Core.Models
 Imports JalaTax.Core.Rules
@@ -7,18 +8,21 @@ Namespace Services
 
     ''' <summary>
     ''' Validates a tax case and runs the tax rules in order: deductions first, then brackets.
+    ''' Every step is recorded in an audit log returned with the outcome.
     ''' </summary>
     Public NotInheritable Class TaxCalculationService
 
         Private ReadOnly _configuration As TaxRuleConfiguration
+        Private ReadOnly _timeProvider As TimeProvider
         Private ReadOnly _validator As New TaxCaseValidator()
         Private ReadOnly _rules As IReadOnlyList(Of ITaxRule) = New ITaxRule() {
             New DeductionRule(),
             New TaxBracketRule()
         }
 
+        ''' <param name="timeProvider">Source of audit timestamps; the system clock when omitted.</param>
         ''' <exception cref="ConfigurationException">The configuration is invalid.</exception>
-        Public Sub New(configuration As TaxRuleConfiguration)
+        Public Sub New(configuration As TaxRuleConfiguration, Optional timeProvider As TimeProvider = Nothing)
             ArgumentNullException.ThrowIfNull(configuration)
 
             ' Configurations built in code bypass the loader, so they are checked here as well.
@@ -29,17 +33,26 @@ Namespace Services
             End If
 
             _configuration = configuration
+            _timeProvider = If(timeProvider, TimeProvider.System)
         End Sub
 
         Public Function Calculate(taxCase As TaxCase) As CalculationOutcome
             ArgumentNullException.ThrowIfNull(taxCase)
 
+            Dim auditLog As New AuditLog(_timeProvider)
+            auditLog.Record(AuditEventType.CaseLoaded, $"Tax case {DescribeCase(taxCase)} loaded")
+
             Dim validation = _validator.Validate(taxCase)
             If Not validation.IsValid Then
-                Return CalculationOutcome.Rejected(taxCase, validation)
+                For Each problem In validation.Errors
+                    auditLog.Record(AuditEventType.ValidationFailed, $"Validation failed: {problem.Message}")
+                Next
+                Return CalculationOutcome.Rejected(taxCase, validation, auditLog.Entries)
             End If
 
-            Dim context As New TaxCalculationContext(taxCase, _configuration)
+            auditLog.Record(AuditEventType.ValidationPassed, "Income and deductions validated")
+
+            Dim context As New TaxCalculationContext(taxCase, _configuration, auditLog)
             For Each rule In _rules
                 rule.Apply(context)
             Next
@@ -51,7 +64,15 @@ Namespace Services
                                         context.TaxableIncome,
                                         context.CalculatedTax)
 
-            Return CalculationOutcome.Succeeded(taxCase, validation, result, context.BracketTaxes)
+            auditLog.Record(AuditEventType.CalculationCompleted,
+                            $"Calculation completed: taxable income {AuditFormat.Amount(result.TaxableIncome)}, " &
+                            $"calculated tax {AuditFormat.Amount(result.CalculatedTax)}")
+
+            Return CalculationOutcome.Succeeded(taxCase, validation, result, context.BracketTaxes, auditLog.Entries)
+        End Function
+
+        Private Shared Function DescribeCase(taxCase As TaxCase) As String
+            Return If(String.IsNullOrWhiteSpace(taxCase.TaxpayerId), "(no taxpayer ID)", taxCase.TaxpayerId)
         End Function
 
     End Class
