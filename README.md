@@ -64,6 +64,8 @@ Demo scaffold. Tax rules are not implemented yet.
 
 In Visual Studio, open `JalaTax.sln`, set **JalaTax.Console** as the startup project and press **F5**.
 
+In Visual Studio Code, install the recommended extensions when prompted (C# and EditorConfig), then press **F5**. The `JalaTax.Console` launch configuration builds the solution and runs the app in the integrated terminal, so breakpoints work. **Terminal → Run Task** also offers `build`, `test` and `format`. VB.NET debugging works in VS Code, but editor features such as IntelliSense are more limited than in Visual Studio.
+
 ## Run tests
 
 ```powershell
