@@ -1,0 +1,112 @@
+# JalaTax coding standards.
+# Enforced during build (EnforceCodeStyleInBuild) and by `dotnet format --verify-no-changes`.
+# Rules at "warning" severity fail the build because warnings are treated as errors.
+
+root = true
+
+[*]
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{vbproj,props,targets,xml,json,yml,yaml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.vb]
+indent_size = 4
+tab_width = 4
+
+# ---------------------------------------------------------------------------
+# Imports
+# ---------------------------------------------------------------------------
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+dotnet_diagnostic.IDE0005.severity = warning            # Remove unnecessary imports
+
+# ---------------------------------------------------------------------------
+# Language style
+# ---------------------------------------------------------------------------
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+dotnet_diagnostic.IDE0003.severity = warning            # Remove Me. qualification
+dotnet_diagnostic.IDE0009.severity = warning
+
+dotnet_style_predefined_type_for_locals_parameters_members = true:warning
+dotnet_style_predefined_type_for_member_access = true:warning
+dotnet_diagnostic.IDE0049.severity = warning            # Use Integer/String, not Int32/System.String
+
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
+dotnet_diagnostic.IDE0040.severity = warning            # Explicit accessibility modifiers
+
+dotnet_style_readonly_field = true:warning
+dotnet_diagnostic.IDE0044.severity = warning            # Make field ReadOnly
+
+dotnet_style_object_initializer = true:suggestion
+dotnet_style_collection_initializer = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_prefer_auto_properties = true:suggestion
+dotnet_style_explicit_tuple_names = true:warning
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+
+visual_basic_style_prefer_isnot_expression = true:warning
+visual_basic_style_prefer_simplified_object_creation = true:suggestion
+visual_basic_style_unused_value_assignment_preference = unused_local_variable:suggestion
+visual_basic_style_unused_value_expression_statement_preference = unused_local_variable:suggestion
+visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async,Iterator:warning
+dotnet_diagnostic.IDE0036.severity = warning            # Modifier order
+
+dotnet_code_quality_unused_parameters = all:warning
+dotnet_diagnostic.IDE0060.severity = warning            # Remove unused parameter
+dotnet_diagnostic.IDE0051.severity = warning            # Remove unused private member
+dotnet_diagnostic.IDE0052.severity = warning            # Remove unread private member
+
+# ---------------------------------------------------------------------------
+# Naming conventions (see AGENTS.md > Coding Style)
+# ---------------------------------------------------------------------------
+dotnet_diagnostic.IDE1006.severity = warning
+
+# Interfaces: IPascalCase
+dotnet_naming_rule.interfaces_begin_with_i.symbols = interfaces
+dotnet_naming_rule.interfaces_begin_with_i.style = prefix_i_pascal_case
+dotnet_naming_rule.interfaces_begin_with_i.severity = warning
+dotnet_naming_symbols.interfaces.applicable_kinds = interface
+dotnet_naming_symbols.interfaces.applicable_accessibilities = *
+
+# Types and non-field members: PascalCase
+dotnet_naming_rule.types_and_members_pascal_case.symbols = types_and_members
+dotnet_naming_rule.types_and_members_pascal_case.style = pascal_case
+dotnet_naming_rule.types_and_members_pascal_case.severity = warning
+dotnet_naming_symbols.types_and_members.applicable_kinds = namespace, class, struct, enum, delegate, method, property, event
+dotnet_naming_symbols.types_and_members.applicable_accessibilities = *
+
+# Public and friend fields and constants: PascalCase
+dotnet_naming_rule.visible_fields_pascal_case.symbols = visible_fields
+dotnet_naming_rule.visible_fields_pascal_case.style = pascal_case
+dotnet_naming_rule.visible_fields_pascal_case.severity = warning
+dotnet_naming_symbols.visible_fields.applicable_kinds = field
+dotnet_naming_symbols.visible_fields.applicable_accessibilities = public, friend, protected, protected_friend
+
+# Parameters and locals: camelCase
+dotnet_naming_rule.parameters_and_locals_camel_case.symbols = parameters_and_locals
+dotnet_naming_rule.parameters_and_locals_camel_case.style = camel_case
+dotnet_naming_rule.parameters_and_locals_camel_case.severity = warning
+dotnet_naming_symbols.parameters_and_locals.applicable_kinds = parameter, local
+dotnet_naming_symbols.parameters_and_locals.applicable_accessibilities = *
+
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+dotnet_naming_style.camel_case.capitalization = camel_case
+dotnet_naming_style.prefix_i_pascal_case.capitalization = pascal_case
+dotnet_naming_style.prefix_i_pascal_case.required_prefix = I
+
+# ---------------------------------------------------------------------------
+# Test project: MSTest method names use the Method_WhenCondition_ExpectedResult pattern.
+# ---------------------------------------------------------------------------
+[tests/**.vb]
+dotnet_diagnostic.CA1707.severity = none                # Underscores in identifiers

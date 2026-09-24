@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- A JalaTax.Console namespace would shadow System.Console, so the entry point stays in JalaTax. -->
+    <RootNamespace>JalaTax</RootNamespace>
+    <AssemblyName>JalaTax</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\JalaTax.Core\JalaTax.Core.vbproj" />
+  </ItemGroup>
+
+</Project>
