@@ -1,3 +1,4 @@
+Imports System.ComponentModel
 Imports System.Globalization
 Imports System.IO
 Imports System.Windows.Forms
@@ -15,14 +16,21 @@ Imports JalaTax.Core.Services
 Public Class MainForm
 
     Private _service As TaxCalculationService
+    Private ReadOnly _ruleSets As New List(Of TaxRuleConfiguration)()
+    Private ReadOnly _ruleSetFiles As New List(Of String)()
+    Private _selectedRuleSet As Integer = -1
     Private _exampleCases As IReadOnlyList(Of TaxCase) = Array.Empty(Of TaxCase)()
     Private _inputFields As Dictionary(Of String, Control)
 
     ' Status text is kept as a function so it can be shown again in a newly selected language.
     Private _status As Func(Of String) = Function() String.Empty
 
-    ' True after Calculate, so a language switch can re-run the calculation in the new language.
+    ' True after Calculate, so a language or rule set switch can re-run the calculation.
     Private _hasOutput As Boolean
+
+    ''' <summary>File name of the rule set to select at startup (from --rules); the demo rules when empty.</summary>
+    <DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)>
+    Public Property InitialRuleSetFile As String
 
     Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         _inputFields = New Dictionary(Of String, Control) From {
@@ -33,19 +41,77 @@ Public Class MainForm
 
         Icon = LoadApplicationIcon()
         ApplyTexts()
-        LoadRules()
+        LoadRuleSets()
         LoadExampleCases()
     End Sub
 
-    Private Sub LoadRules()
-        Try
-            _service = New TaxCalculationService(New TaxRuleConfigurationLoader().Load(DataPath("rules.json")))
-            SetStatus(Function() UiText.Get("Status_RulesLoaded"))
-        Catch ex As ConfigurationException
+    ''' <summary>
+    ''' Loads every data\rules*.json file as a selectable rule set; data\rules.json (the fictional
+    ''' demo rules) comes first and is selected by default. Invalid files are reported and skipped.
+    ''' </summary>
+    Private Sub LoadRuleSets()
+        Dim loader As New TaxRuleConfigurationLoader()
+        Dim problems As New List(Of String)()
+        Dim ruleFiles = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "data"), "rules*.json").
+            OrderBy(Function(file) If(Path.GetFileName(file) = "rules.json", 0, 1)).
+            ThenBy(Function(file) file, StringComparer.OrdinalIgnoreCase)
+
+        For Each ruleFile In ruleFiles
+            Try
+                _ruleSets.Add(loader.Load(ruleFile))
+                _ruleSetFiles.Add(Path.GetFileName(ruleFile))
+            Catch ex As ConfigurationException
+                problems.Add($"{Path.GetFileName(ruleFile)}: {ex.Message}")
+            End Try
+        Next
+
+        If problems.Count > 0 Then
+            MessageBox.Show(String.Join(Environment.NewLine & Environment.NewLine, problems),
+                            UiText.Get("Title_ConfigError"), MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End If
+
+        If _ruleSets.Count = 0 Then
             CalculateButton.Enabled = False
+            RuleSetDropDownButton.Enabled = False
             SetStatus(Function() UiText.Get("Status_ConfigError"))
-            MessageBox.Show(ex.Message, UiText.Get("Title_ConfigError"), MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
+            Return
+        End If
+
+        For index = 0 To _ruleSets.Count - 1
+            Dim item As New ToolStripMenuItem() With {.Tag = index}
+            AddHandler item.Click, AddressOf RuleSetMenuItem_Click
+            RuleSetDropDownButton.DropDownItems.Add(item)
+        Next
+
+        Dim initialIndex = _ruleSetFiles.FindIndex(Function(file) String.Equals(file, Path.GetFileName(If(InitialRuleSetFile, String.Empty)), StringComparison.OrdinalIgnoreCase))
+        SelectRuleSet(Math.Max(0, initialIndex))
+        SetStatus(Function() UiText.Get("Status_RulesLoaded"))
+    End Sub
+
+    Private Sub RuleSetMenuItem_Click(sender As Object, e As EventArgs)
+        SelectRuleSet(CInt(DirectCast(sender, ToolStripMenuItem).Tag))
+
+        If _hasOutput Then
+            CalculateButton.PerformClick()
+        End If
+    End Sub
+
+    Private Sub SelectRuleSet(index As Integer)
+        _selectedRuleSet = index
+        _service = New TaxCalculationService(_ruleSets(index))
+        ApplyRuleSetTexts()
+    End Sub
+
+    Private Sub ApplyRuleSetTexts()
+        For Each item As ToolStripMenuItem In RuleSetDropDownButton.DropDownItems
+            Dim index = CInt(item.Tag)
+            item.Text = DisplayText.RuleSetName(_ruleSets(index))
+            item.Checked = index = _selectedRuleSet
+        Next
+
+        RuleSetDropDownButton.Text = If(_selectedRuleSet >= 0,
+                                        UiText.Get("RuleSet_Selector", DisplayText.RuleSetName(_ruleSets(_selectedRuleSet))),
+                                        UiText.Get("RuleSet_Selector", "–"))
     End Sub
 
     Private Sub LoadExampleCases()
@@ -154,6 +220,7 @@ Public Class MainForm
         LanguageDropDownButton.Text = UiText.Get("Language_Selector", Languages.DisplayName(Languages.Current))
         FinnishMenuItem.Checked = Languages.Current = Languages.Finnish
         EnglishMenuItem.Checked = Languages.Current = Languages.English
+        ApplyRuleSetTexts()
 
         StatusLabel.Text = _status()
     End Sub
