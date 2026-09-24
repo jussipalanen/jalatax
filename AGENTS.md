@@ -235,6 +235,19 @@ These numbers are fictional and exist only for demonstration purposes.
 
 Never present them as current Finnish tax rules.
 
+### Rule sets based on published figures
+
+The default rule set (`data/rules.json`) must stay fictional.
+
+An additional rule set may use published Finnish tax figures, such as `data/rules-fi-2026.json` with the 2026 state income tax scale, when all of the following hold:
+
+* The figures come from an official source (for example the law on the income tax scale), named in a comment in the file.
+* The file states what is left out, for example municipal tax, church tax, contributions and tax credits.
+* The rule set has a name that says it is simplified, and every UI says the result is not an official tax calculation.
+* Tests check the figures against the published values.
+
+Never present any result as an official or complete tax calculation.
+
 Configuration loading must include error handling for:
 
 * Missing files
@@ -559,7 +572,7 @@ It should eventually explain:
 * How to run the application
 * How to run tests
 * Example output
-* Important disclaimer that all tax rules are fictional
+* Important disclaimer that the default tax rules are fictional and no result is an official tax calculation
 
 Update the README when externally visible behavior changes.
 
