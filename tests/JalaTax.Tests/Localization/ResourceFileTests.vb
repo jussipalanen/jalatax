@@ -76,13 +76,7 @@ Public Class ResourceFileTests
     End Function
 
     Private Shared Function SourceDirectory() As String
-        Dim directory = New DirectoryInfo(AppContext.BaseDirectory)
-        While directory IsNot Nothing AndAlso Not File.Exists(Path.Combine(directory.FullName, "JalaTax.sln"))
-            directory = directory.Parent
-        End While
-
-        Assert.IsNotNull(directory, "Repository root (JalaTax.sln) not found.")
-        Return Path.Combine(directory.FullName, "src")
+        Return Path.Combine(RepositoryPaths.Root(), "src")
     End Function
 
 End Class
