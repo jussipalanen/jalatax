@@ -31,6 +31,7 @@ Public Class MainForm
             {NameOf(TaxCase.Deductions), DeductionsTextBox}
         }
 
+        Icon = LoadApplicationIcon()
         ApplyTexts()
         LoadRules()
         LoadExampleCases()
@@ -240,6 +241,13 @@ Public Class MainForm
         ResultListView.Items.Clear()
         AuditListView.Items.Clear()
     End Sub
+
+    ''' <summary>The JalaTax logo icon, embedded from assets/jalatax.ico with all its sizes.</summary>
+    Private Shared Function LoadApplicationIcon() As Drawing.Icon
+        Using stream = GetType(MainForm).Assembly.GetManifestResourceStream("JalaTax.WinForms.jalatax.ico")
+            Return New Drawing.Icon(stream)
+        End Using
+    End Function
 
     Private Shared Function DataPath(fileName As String) As String
         Return Path.Combine(AppContext.BaseDirectory, "data", fileName)

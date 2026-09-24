@@ -8,7 +8,13 @@
     <StartupObject>JalaTax.WinForms.Program</StartupObject>
     <!-- Lets the Linux CI runner build this Windows-only project; it runs only on Windows. -->
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <!-- Icon of JalaTax.WinForms.exe in Explorer; the window icon is embedded below. -->
+    <ApplicationIcon>..\..\assets\jalatax.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\assets\jalatax.ico" LogicalName="JalaTax.WinForms.jalatax.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\JalaTax.Core\JalaTax.Core.vbproj" />
