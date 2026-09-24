@@ -6,7 +6,16 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-Project scaffold only. The solution structure and code standards are in place; tax rules, configuration loading, validation and the audit trail are not implemented yet.
+In progress. The solution structure, code standards and domain models are in place. Configuration loading, validation, the tax rules and the audit trail are not implemented yet.
+
+## Calculation rules
+
+These are the agreed rules for the fictional calculation. The domain models describe them; the calculation itself arrives in a later phase.
+
+1. **Taxable income** = annual income − the case's deductions − the configured basic deduction, and never below 0.
+2. **Progressive brackets:** each bracket's rate applies only to the part of taxable income inside that bracket. With the example brackets (0–20,000 at 10 %, 20,000–50,000 at 20 %, 50,000+ at 30 %), a taxable income of 42,500 is taxed 20,000 × 10 % + 22,500 × 20 % = 6,500.
+3. **Bracket boundaries** include the lower bound and exclude the upper bound, so exactly 20,000 falls in the 20,000–50,000 bracket. The top bracket has no upper bound.
+4. **Rounding:** amounts use `Decimal`, and the calculated tax is rounded to 2 decimals with halves rounded away from zero.
 
 ## Technology stack
 
