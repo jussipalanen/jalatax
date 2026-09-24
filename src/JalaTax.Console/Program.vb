@@ -22,7 +22,7 @@ Friend Module Program
 
     Public Function Main(args As String()) As Integer
         Console.OutputEncoding = Encoding.UTF8
-        Console.WriteLine("JalaTax")
+        Console.WriteLine($"{ApplicationInfo.Name} {ApplicationInfo.Version}")
         Console.WriteLine(Separator)
 
         Try
