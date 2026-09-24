@@ -377,4 +377,10 @@ Two safety nets:
 
 ## Contributing
 
-Work happens on feature branches (for example `feature/configurable-tax-rules`) and is merged to `main` through a pull request that a human reviews. The pull request template lists what to describe and check.
+Work happens on feature branches (for example `feature/configurable-tax-rules`) and is merged to `main` through a pull request that a human reviews. The pull request template lists what to describe and check. Only the owner can change `main` and publish releases. Suggestions are welcome as issues.
+
+## Copyright
+
+© 2026 Jussi Alanen. All rights reserved.
+
+The source code is public for viewing and review only. No license is granted to copy, modify or distribute it.

@@ -253,3 +253,9 @@ Testit varmistavat, että CHANGELOG.md:ssä on osio nykyiselle versiolle, joten 
 - [AGENTS.md](AGENTS.md): kehitysohjeet ja periaatteet
 - [CHANGELOG.md](CHANGELOG.md): versiohistoria
 - [Releases](https://github.com/jussipalanen/jalatax/releases): ladattavat versiot
+
+## Tekijänoikeus
+
+© 2026 Jussi Alanen. Kaikki oikeudet pidätetään.
+
+Lähdekoodi on julkinen vain tarkastelua ja arviointia varten. Sen kopioimiseen, muuttamiseen tai levittämiseen ei anneta lupaa.
