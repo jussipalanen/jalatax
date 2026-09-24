@@ -29,7 +29,8 @@ Use:
 
 * VB.NET
 * Modern .NET
-* .NET Console Application
+* Windows Forms desktop application (main user interface)
+* .NET Console Application (secondary command-line runner)
 * .NET Class Library
 * MSTest
 * System.Text.Json
@@ -62,6 +63,10 @@ JalaTax/
 │   │   ├── Validation/
 │   │   └── Audit/
 │   │
+│   ├── JalaTax.WinForms/
+│   │   ├── Program.vb
+│   │   └── MainForm.vb
+│   │
 │   └── JalaTax.Console/
 │       └── Program.vb
 │
@@ -85,7 +90,7 @@ Follow a simple layered architecture.
 
 Contains the actual domain and business logic.
 
-It must not depend on the console application.
+It must not depend on the Windows Forms or console applications, or on any UI technology.
 
 Responsibilities include:
 
@@ -97,9 +102,23 @@ Responsibilities include:
 * Audit events
 * Business services
 
+### JalaTax.WinForms
+
+The main user interface: a Windows Forms desktop application.
+
+Responsibilities include:
+
+* Loading configuration at startup
+* Letting the user enter or load a tax case
+* Calling JalaTax.Core services
+* Showing validation messages, results and the audit trail
+* Showing errors in a user-friendly way
+
+Do not place business rules in forms or event handlers. Event handlers should read input, call JalaTax.Core and display the outcome.
+
 ### JalaTax.Console
 
-Acts only as the application entry point.
+A secondary command-line runner that processes the example input without a UI. It is useful for quick checks and runs on any platform.
 
 Responsibilities include:
 
@@ -432,6 +451,21 @@ Do not build a complex console UI.
 
 ---
 
+## Windows Forms UI
+
+Keep the desktop UI simple and conventional.
+
+* One main form is enough: case input fields, a Calculate button, a result panel, validation messages and an audit log list.
+* Use standard Windows Forms controls only. Do not add third-party UI component libraries.
+* Designer-generated code (`*.Designer.vb`) is acceptable; keep hand-written form code small.
+* Show validation errors next to the input or in a clear message area, not only in message boxes.
+* Format amounts consistently with the console output.
+* The form is tested manually; business behavior is tested in JalaTax.Tests.
+
+The Windows Forms project targets Windows only (`net10.0-windows`). JalaTax.Core and JalaTax.Tests stay platform-independent.
+
+---
+
 ## Security and Privacy
 
 This is a demonstration application.
@@ -541,6 +575,8 @@ Do not automatically add:
 * Angular
 * Vue
 * Blazor
+* WPF or MVVM frameworks
+* Third-party UI component libraries
 * Databases
 * Authentication
 * Docker
@@ -561,7 +597,7 @@ A task is complete when:
 
 * The requested functionality works.
 * Code follows the project architecture.
-* Business logic remains outside the console entry point.
+* Business logic remains outside the Windows Forms UI and the console entry point.
 * Appropriate tests exist.
 * `dotnet build` succeeds.
 * `dotnet test` succeeds.

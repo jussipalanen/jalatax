@@ -44,7 +44,7 @@ The rules are read from [data/rules.json](data/rules.json):
 ## Technology stack
 
 - VB.NET on .NET 10
-- .NET console application and class library
+- Windows Forms desktop application (main UI, planned in #11), console runner and class library
 - MSTest (Microsoft.Testing.Platform runner)
 - System.Text.Json and JSON configuration files
 
