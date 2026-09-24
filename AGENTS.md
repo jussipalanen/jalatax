@@ -507,8 +507,15 @@ For non-trivial features:
 2. Make focused changes.
 3. Add or update tests.
 4. Run build and tests.
-5. Update documentation when necessary.
+5. Update documentation when necessary, and add user-visible changes to `CHANGELOG.md` under `## [Unreleased]`.
 6. Create a pull request.
+
+### Versions and releases
+
+* Use semantic versioning. The version is set only in `Directory.Build.props`.
+* Each release is a Git tag `vX.Y.Z` with a GitHub Release, created by `.github/workflows/release.yml` when a version without a tag reaches `main`.
+* To release, change `<Version>` and move the `Unreleased` changelog entries into a new version section in the same pull request.
+* Never move or delete a published tag.
 
 Suggested branch naming:
 

@@ -1,0 +1,121 @@
+name: Release
+
+# Releases are identified by Git tags vX.Y.Z, where X.Y.Z is the <Version> in Directory.Build.props.
+#
+# - Push to main: if the tag for the current version does not exist yet, this workflow
+#   creates it together with the GitHub Release (automatic release after a version bump).
+# - Push of a vX.Y.Z tag: releases that tag, after checking it matches Directory.Build.props.
+#
+# Release notes are the version's section in CHANGELOG.md.
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*.*.*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine version and tag
+        id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props)
+          tag="v${version}"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Version '$version' in Directory.Build.props is not major.minor.patch."
+            exit 1
+          fi
+          if [[ "$GITHUB_REF_TYPE" == "tag" && "$GITHUB_REF_NAME" != "$tag" ]]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version $version in Directory.Build.props."
+            exit 1
+          fi
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "Release $tag already exists; nothing to do."
+            echo "release=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "Releasing $tag."
+            echo "release=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Extract release notes from CHANGELOG.md
+        if: steps.version.outputs.release == 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          awk -v heading="## [${VERSION}]" '
+            index($0, heading) == 1 { found = 1; next }
+            found && /^## \[/ { exit }
+            found && /^\[[^]]+\]: / { exit }
+            found { print }
+          ' CHANGELOG.md > release-notes.md
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::CHANGELOG.md has no section for ${VERSION}."
+            exit 1
+          fi
+          cat release-notes.md
+
+      - name: Set up .NET
+        if: steps.version.outputs.release == 'true'
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Build and test
+        if: steps.version.outputs.release == 'true'
+        run: |
+          dotnet build --configuration Release
+          dotnet test --configuration Release --no-build
+
+      - name: Publish desktop app and console runner
+        if: steps.version.outputs.release == 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          dotnet publish src/JalaTax.WinForms --configuration Release --runtime win-x64 --self-contained false --output "publish/JalaTax-${VERSION}-windows-x64"
+          dotnet publish src/JalaTax.Console --configuration Release --output "publish/JalaTax-${VERSION}-console"
+          for folder in publish/*/; do
+            cp CHANGELOG.md README.md README.fi.md "$folder"
+          done
+
+      - name: Create zip packages
+        if: steps.version.outputs.release == 'true'
+        shell: pwsh
+        run: |
+          Get-ChildItem publish -Directory | ForEach-Object {
+            Compress-Archive -Path "$($_.FullName)\*" -DestinationPath "publish\$($_.Name).zip"
+          }
+          Get-ChildItem publish -Filter *.zip | Select-Object Name, Length
+
+      - name: Create tag and GitHub Release
+        if: steps.version.outputs.release == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$TAG" publish/*.zip \
+            --title "JalaTax ${VERSION}" \
+            --notes-file release-notes.md \
+            --target "$GITHUB_SHA"
