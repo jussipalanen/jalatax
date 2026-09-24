@@ -160,4 +160,14 @@
   <data name="Language_Unsupported" xml:space="preserve">
     <value>Kieltä '{0}' ei tueta. Käytä jotakin näistä: {1}.</value>
   </data>
+  <!-- Rule sets -->
+  <data name="Audit_RuleSetSelected" xml:space="preserve">
+    <value>Sääntöjoukko: {0}</value>
+  </data>
+  <data name="RuleSet_Unnamed" xml:space="preserve">
+    <value>Nimetön sääntöjoukko</value>
+  </data>
+  <data name="Event_RuleSetSelected" xml:space="preserve">
+    <value>Sääntöjoukko valittu</value>
+  </data>
 </root>

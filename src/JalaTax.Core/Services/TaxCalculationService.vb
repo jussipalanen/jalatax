@@ -52,6 +52,7 @@ Namespace Services
             End If
 
             auditLog.Record(AuditEventType.ValidationPassed, CoreText.Get("Audit_ValidationPassed"))
+            auditLog.Record(AuditEventType.RuleSetSelected, CoreText.Get("Audit_RuleSetSelected", DisplayText.RuleSetName(_configuration)))
 
             Dim context As New TaxCalculationContext(taxCase, _configuration, auditLog)
             For Each rule In _rules

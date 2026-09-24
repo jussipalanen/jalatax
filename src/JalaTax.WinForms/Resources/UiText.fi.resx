@@ -13,7 +13,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Form_Title" xml:space="preserve">
-    <value>JalaTax – kuvitteellinen verolaskentaesimerkki</value>
+    <value>JalaTax – verolaskennan esimerkkisovellus</value>
   </data>
   <data name="Group_Case" xml:space="preserve">
     <value>Verotapaus</value>
@@ -58,7 +58,7 @@
     <value>Kieli: {0}</value>
   </data>
   <data name="Status_RulesLoaded" xml:space="preserve">
-    <value>Säännöt ladattu tiedostosta data\rules.json. Kaikki verosäännöt ovat kuvitteellisia.</value>
+    <value>Esimerkkilaskenta, ei virallinen verolaskelma.</value>
   </data>
   <data name="Status_ConfigError" xml:space="preserve">
     <value>Asetusvirhe: laskenta ei ole käytettävissä.</value>
@@ -91,12 +91,15 @@
     <value>VB.NET-esimerkki konfiguroitavista liiketoimintasäännöistä, tarkistuksista ja jäljitettävyydestä.</value>
   </data>
   <data name="About_Fictional" xml:space="preserve">
-    <value>Kaikki verosäännöt ja tiedot ovat kuvitteellisia.</value>
+    <value>Esimerkkitiedot ovat kuvitteellisia, eikä tulos ole virallinen verolaskelma.</value>
   </data>
   <data name="Error_Unexpected" xml:space="preserve">
     <value>Tapahtui odottamaton virhe:</value>
   </data>
   <data name="Error_InvalidLanguageOption" xml:space="preserve">
     <value>{0} Käytetään oletuskieltä (suomi).</value>
+  </data>
+  <data name="RuleSet_Selector" xml:space="preserve">
+    <value>Säännöt: {0}</value>
   </data>
 </root>

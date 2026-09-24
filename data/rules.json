@@ -1,4 +1,8 @@
 {
+  "names": {
+    "fi": "Kuvitteelliset esimerkkisäännöt",
+    "en": "Fictional demo rules"
+  },
   "basicDeduction": 3000,
   "taxBrackets": [
     {

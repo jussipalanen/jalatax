@@ -48,6 +48,7 @@ Partial Class MainForm
         Me.AuditDescriptionColumn = New System.Windows.Forms.ColumnHeader()
         Me.MainStatusStrip = New System.Windows.Forms.StatusStrip()
         Me.StatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.RuleSetDropDownButton = New System.Windows.Forms.ToolStripDropDownButton()
         Me.LanguageDropDownButton = New System.Windows.Forms.ToolStripDropDownButton()
         Me.FinnishMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.EnglishMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -266,7 +267,7 @@ Partial Class MainForm
         '
         'MainStatusStrip
         '
-        Me.MainStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.LanguageDropDownButton})
+        Me.MainStatusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.StatusLabel, Me.RuleSetDropDownButton, Me.LanguageDropDownButton})
         Me.MainStatusStrip.Location = New System.Drawing.Point(0, 614)
         Me.MainStatusStrip.Name = "MainStatusStrip"
         Me.MainStatusStrip.Size = New System.Drawing.Size(920, 22)
@@ -278,6 +279,13 @@ Partial Class MainForm
         Me.StatusLabel.Size = New System.Drawing.Size(789, 17)
         Me.StatusLabel.Spring = True
         Me.StatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+        '
+        'RuleSetDropDownButton
+        '
+        Me.RuleSetDropDownButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
+        Me.RuleSetDropDownButton.Name = "RuleSetDropDownButton"
+        Me.RuleSetDropDownButton.Size = New System.Drawing.Size(140, 20)
+        Me.RuleSetDropDownButton.Text = "Rules"
         '
         'LanguageDropDownButton
         '
@@ -318,7 +326,7 @@ Partial Class MainForm
         Me.MinimumSize = New System.Drawing.Size(900, 560)
         Me.Name = "MainForm"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "JalaTax – fictional tax calculation demo"
+        Me.Text = "JalaTax – tax calculation demo"
         Me.CaseGroupBox.ResumeLayout(False)
         Me.CaseGroupBox.PerformLayout()
         Me.ResultGroupBox.ResumeLayout(False)
@@ -356,6 +364,7 @@ Partial Class MainForm
     Friend WithEvents AuditDescriptionColumn As System.Windows.Forms.ColumnHeader
     Friend WithEvents MainStatusStrip As System.Windows.Forms.StatusStrip
     Friend WithEvents StatusLabel As System.Windows.Forms.ToolStripStatusLabel
+    Friend WithEvents RuleSetDropDownButton As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents LanguageDropDownButton As System.Windows.Forms.ToolStripDropDownButton
     Friend WithEvents FinnishMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents EnglishMenuItem As System.Windows.Forms.ToolStripMenuItem

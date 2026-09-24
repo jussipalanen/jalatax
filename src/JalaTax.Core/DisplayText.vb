@@ -49,6 +49,27 @@ Public Module DisplayText
         Return CoreText.Get("Label_Bracket", DisplayFormat.BracketRange(taxBracket), DisplayFormat.Rate(taxBracket.Rate))
     End Function
 
+    ''' <summary>
+    ''' The rule set's name in the current language, falling back to English, then to any name,
+    ''' then to a generic "unnamed rule set" text.
+    ''' </summary>
+    Public Function RuleSetName(configuration As TaxRuleConfiguration) As String
+        ArgumentNullException.ThrowIfNull(configuration)
+
+        Dim names = If(configuration.Names, New Dictionary(Of String, String)())
+        Dim name As String = Nothing
+        If names.TryGetValue(Languages.Current, name) AndAlso Not String.IsNullOrWhiteSpace(name) Then
+            Return name
+        End If
+
+        If names.TryGetValue(Languages.English, name) AndAlso Not String.IsNullOrWhiteSpace(name) Then
+            Return name
+        End If
+
+        Dim anyName = names.Values.FirstOrDefault(Function(value) Not String.IsNullOrWhiteSpace(value))
+        Return If(anyName, CoreText.Get("RuleSet_Unnamed"))
+    End Function
+
     ''' <summary>A readable name for the event, for example "Case loaded".</summary>
     Public Function EventName(eventType As AuditEventType) As String
         Return CoreText.Get($"Event_{eventType}")
