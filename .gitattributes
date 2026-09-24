@@ -1,0 +1,5 @@
+# Normalize line endings in the repository; Git converts them to the platform default on checkout.
+* text=auto
+
+*.png binary
+*.jpg binary
