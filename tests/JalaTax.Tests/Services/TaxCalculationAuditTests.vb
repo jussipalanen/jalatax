@@ -23,6 +23,7 @@ Public Class TaxCalculationAuditTests
             New List(Of AuditEventType) From {
                 AuditEventType.CaseLoaded,
                 AuditEventType.ValidationPassed,
+                AuditEventType.RuleSetSelected,
                 AuditEventType.RuleApplied,
                 AuditEventType.RuleApplied,
                 AuditEventType.RuleApplied,
@@ -44,6 +45,7 @@ Public Class TaxCalculationAuditTests
             New List(Of String) From {
                 "Tax case DEMO-001 loaded",
                 "Income and deductions validated",
+                "Rule set: Unnamed rule set",
                 "Deductions applied: taxable income 39,500.00 (income 45,000.00 − deductions 2,500.00 − basic deduction 3,000.00, not below 0.00)",
                 "Tax bracket 0.00–20,000.00 at 10 %: 20,000.00 taxed, tax 2,000.00",
                 "Tax bracket 20,000.00–50,000.00 at 20 %: 19,500.00 taxed, tax 3,900.00",
@@ -132,8 +134,8 @@ Public Class TaxCalculationAuditTests
         Dim second = _service.Calculate(CreateCase(1000D, 0D))
 
         ' Assert
-        Assert.HasCount(6, first.AuditEntries)
-        Assert.HasCount(5, second.AuditEntries)
+        Assert.HasCount(7, first.AuditEntries)
+        Assert.HasCount(6, second.AuditEntries)
     End Sub
 
 End Class

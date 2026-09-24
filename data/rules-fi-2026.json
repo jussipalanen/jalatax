@@ -1,0 +1,20 @@
+// Valtion tuloveroasteikko 2026 – Finnish state income tax scale 2026.
+// Source: Laki vuoden 2026 tuloveroasteikosta (1140/2025).
+//
+// Simplified on purpose: only the state income tax on taxable earned income is calculated.
+// Municipal tax, church tax, health insurance contributions and tax credits such as the
+// earned income deduction (työtulovähennys) are not included. Not an official tax calculation.
+{
+  "names": {
+    "fi": "Valtion tuloveroasteikko 2026 (yksinkertaistettu)",
+    "en": "State income tax scale 2026 (simplified)"
+  },
+  "basicDeduction": 0,
+  "taxBrackets": [
+    { "min": 0,     "max": 22000, "rate": 0.1264 },
+    { "min": 22000, "max": 32600, "rate": 0.19 },
+    { "min": 32600, "max": 40100, "rate": 0.3025 },
+    { "min": 40100, "max": 52100, "rate": 0.3325 },
+    { "min": 52100, "max": null,  "rate": 0.375 }
+  ]
+}

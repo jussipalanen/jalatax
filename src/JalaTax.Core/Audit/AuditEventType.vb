@@ -4,6 +4,7 @@ Namespace Audit
         CaseLoaded
         ValidationPassed
         ValidationFailed
+        RuleSetSelected
         RuleApplied
         CalculationCompleted
     End Enum

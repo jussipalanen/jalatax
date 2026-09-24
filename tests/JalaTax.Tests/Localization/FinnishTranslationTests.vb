@@ -60,6 +60,7 @@ Public Class FinnishTranslationTests
                 New List(Of String) From {
                     "Verotapaus DEMO-001 ladattu",
                     "Tulot ja vähennykset tarkistettu",
+                    "Sääntöjoukko: Nimetön sääntöjoukko",
                     $"Vähennykset tehty: verotettava tulo 39{Nbsp}500,00 (tulot 45{Nbsp}000,00 − vähennykset 2{Nbsp}500,00 − perusvähennys 3{Nbsp}000,00, vähintään 0,00)",
                     $"Veroporras 0,00–20{Nbsp}000,00, 10 %: verotettu 20{Nbsp}000,00, vero 2{Nbsp}000,00",
                     $"Veroporras 20{Nbsp}000,00–50{Nbsp}000,00, 20 %: verotettu 19{Nbsp}500,00, vero 3{Nbsp}900,00",
