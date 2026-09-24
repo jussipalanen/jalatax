@@ -1,3 +1,5 @@
+Imports System.Text.Json.Serialization
+
 Namespace Models
 
     ''' <summary>
@@ -5,10 +7,13 @@ Namespace Models
     ''' </summary>
     Public Class TaxCase
 
+        <JsonRequired>
         Public Property TaxpayerId As String = String.Empty
 
+        <JsonRequired>
         Public Property AnnualIncome As Decimal
 
+        <JsonRequired>
         Public Property Deductions As Decimal
 
     End Class

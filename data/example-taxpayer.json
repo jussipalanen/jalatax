@@ -1,0 +1,17 @@
+[
+  {
+    "taxpayerId": "DEMO-001",
+    "annualIncome": 45000,
+    "deductions": 2500
+  },
+  {
+    "taxpayerId": "DEMO-002",
+    "annualIncome": 68000,
+    "deductions": 1200
+  },
+  {
+    "taxpayerId": "DEMO-003",
+    "annualIncome": 30000,
+    "deductions": -500
+  }
+]

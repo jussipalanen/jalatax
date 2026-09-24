@@ -6,7 +6,7 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-In progress. The solution structure, code standards, domain models and configuration loading are in place. Input validation, the tax rules and the audit trail are not implemented yet.
+In progress. The solution structure, code standards, domain models, configuration loading and input validation are in place. The tax calculation, the audit trail and the Windows Forms application are not implemented yet.
 
 ## Calculation rules
 
@@ -40,6 +40,30 @@ The rules are read from [data/rules.json](data/rules.json):
 - the JSON is malformed, a required value is missing, or a property name is unknown (for example a typo)
 - the basic deduction is negative or a rate is outside 0–1
 - there are no brackets, the first bracket does not start at 0, brackets have gaps or overlaps, `max` is not greater than `min`, or an open-ended bracket is not the last one
+
+## Tax case input
+
+Example cases are read from [data/example-taxpayer.json](data/example-taxpayer.json), a JSON array of cases with fictional IDs:
+
+```json
+[
+  { "taxpayerId": "DEMO-001", "annualIncome": 45000, "deductions": 2500 },
+  { "taxpayerId": "DEMO-002", "annualIncome": 68000, "deductions": 1200 },
+  { "taxpayerId": "DEMO-003", "annualIncome": 30000, "deductions": -500 }
+]
+```
+
+`DEMO-003` is intentionally invalid, to demonstrate validation.
+
+Loading and validation are separate steps:
+
+- **`TaxCaseLoader`** checks only the file structure. It throws an `InputDataException` if the file is missing or unreadable, the JSON is malformed, the list is empty or has empty entries, a required value (`taxpayerId`, `annualIncome`, `deductions`) is missing, or a property name is unknown.
+- **`TaxCaseValidator`** checks the values of each case before calculation and returns every problem at once:
+  - Taxpayer ID is required.
+  - Annual income must not be negative.
+  - Deductions must not be negative.
+
+  Deductions larger than income are allowed; taxable income is then 0.
 
 ## Technology stack
 
