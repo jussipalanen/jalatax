@@ -1,14 +1,18 @@
 # JalaTax
 
+<p align="center">
+  <img src="assets/jalatax-logo.png" alt="JalaTax – tax calculator in VB.NET" width="420">
+</p>
+
 JalaTax is a small VB.NET demo application that shows configurable business rules, input validation, rule processing, error handling, audit logging and unit testing.
 
 > **Disclaimer:** JalaTax is a fictional demonstration. All tax rules, rates and data in this repository are made up for demo purposes. They are not current Finnish tax rules and do not reproduce or claim compatibility with any real tax administration system.
 
 ## Status
 
-In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation, the audit trail, the Windows Forms desktop application and the console runner are in place.
+In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation, the audit trail, the Windows Forms desktop application, the console runner and Finnish/English translations are in place.
 
-![JalaTax desktop application](docs/screenshots/main-window.png)
+![JalaTax desktop application](docs/screenshots/calculation-demo-001-fi.png)
 
 ## Calculation rules
 
@@ -108,6 +112,23 @@ Loading and validation are separate steps:
 
   Deductions larger than income are allowed; taxable income is then 0.
 
+## Languages
+
+JalaTax is available in **Finnish (default)** and **English**. Everything the user sees is translated: form texts, validation and configuration messages, file errors, audit trail descriptions and console output.
+
+| | Finnish | English |
+|---|---|---|
+| Choose | default, or `--lang fi` | `--lang en` |
+| Desktop app | **Kieli: Suomi** in the status bar | **Language: English** in the status bar |
+| Amounts | `45 000,00` | `45,000.00` |
+| Rates | `12,5 %` | `12.5 %` |
+| Times | `14.05.09` | `14:05:09` |
+
+- **Where texts live:** .NET resource files. `Strings.resx` / `Strings.fi.resx` in `JalaTax.Core` hold messages, audit texts and shared labels. `UiText` (desktop app) and `ConsoleText` (console) hold the app-specific texts. English is the neutral language, and Finnish is built into a satellite assembly (`fi\*.resources.dll`).
+- **Only texts change with the language.** Calculated amounts, validation rules and field names (`PropertyName`) stay the same.
+- **Tests check the translations:** every text exists in both languages, and every text key used in the code exists.
+- **Adding a text:** add it to both `.resx` files of the project, then read it with `CoreText.Get`, `UiText.Get` or `ConsoleText.Get`.
+
 ## Technology stack
 
 - VB.NET on .NET 10
@@ -130,6 +151,7 @@ JalaTax/
 ├── tests/
 │   └── JalaTax.Tests/         MSTest tests for JalaTax.Core
 ├── data/                      JSON rules and example input
+├── assets/                    Logo and application icon
 └── docs/screenshots/          Screenshots of the desktop app
 ```
 
@@ -158,32 +180,37 @@ dotnet build
 ### Desktop application (Windows)
 
 ```powershell
-dotnet run --project src/JalaTax.WinForms
+dotnet run --project src/JalaTax.WinForms                 # Finnish (default)
+dotnet run --project src/JalaTax.WinForms -- --lang en    # English
 ```
 
 1. Pick an example case (`DEMO-001` to `DEMO-003`), or type a taxpayer ID, annual income and deductions.
-2. Press **Calculate** (or Enter).
-3. The **Result** panel shows the amounts and the tax per bracket. The **Audit trail** lists every processing step. Invalid input is marked next to the field, with the message below the buttons.
+2. Press **Laske** / **Calculate** (or Enter).
+3. The **Tulos** / **Result** panel shows the amounts and the tax per bracket. The **Kirjausketju** / **Audit trail** lists every processing step. Invalid input is marked next to the field, with the message below the buttons.
+4. Switch the language from **Kieli: Suomi** / **Language: English** at the bottom right. The current result is recalculated in the new language.
 
-Amounts can be typed in your regional format (for example `45000,50` with Finnish settings). Results always use the same format as the console (`45,000.50`).
+Amounts can be typed in your regional format (for example `45000,50` with Finnish regional settings).
 
-![Calculated case DEMO-001](docs/screenshots/calculation-demo-001.png)
-
-| Top bracket (DEMO-002) | Validation error (DEMO-003) |
+| Finnish (default) | English |
 |---|---|
-| ![DEMO-002](docs/screenshots/calculation-demo-002.png) | ![DEMO-003](docs/screenshots/validation-demo-003.png) |
+| ![DEMO-001 in Finnish](docs/screenshots/calculation-demo-001-fi.png) | ![DEMO-001 in English](docs/screenshots/calculation-demo-001.png) |
+| ![DEMO-002 in Finnish](docs/screenshots/calculation-demo-002-fi.png) | ![DEMO-002 in English](docs/screenshots/calculation-demo-002.png) |
+| ![DEMO-003 in Finnish](docs/screenshots/validation-demo-003-fi.png) | ![DEMO-003 in English](docs/screenshots/validation-demo-003.png) |
 
-**About** shows the application version:
+**Tietoja** / **About** shows the application version:
 
-![About dialog](docs/screenshots/about-dialog.png)
+| Finnish | English |
+|---|---|
+| ![About in Finnish](docs/screenshots/about-dialog-fi.png) | ![About in English](docs/screenshots/about-dialog.png) |
 
 The desktop app needs Windows. The rest of the solution builds and runs on any platform.
 
 ### Console runner
 
 ```powershell
-dotnet run --project src/JalaTax.Console
-dotnet run --project src/JalaTax.Console -- path\to\cases.json
+dotnet run --project src/JalaTax.Console                               # Finnish (default)
+dotnet run --project src/JalaTax.Console -- --lang en                  # English
+dotnet run --project src/JalaTax.Console -- --lang en path\to\cases.json
 ```
 
 The runner processes `data/example-taxpayer.json`, or the file given as an argument:
@@ -192,37 +219,39 @@ The runner processes `data/example-taxpayer.json`, or the file given as an argum
 JalaTax 1.0.0
 ----------------------------------------
 
-Processing case: DEMO-001
+Käsitellään tapausta: DEMO-001
 
-Validation
-✓ Income and deductions validated
+Tarkistus
+✓ Tulot ja vähennykset tarkistettu
 
-Rules
-✓ Deductions applied: taxable income 39,500.00 (income 45,000.00 − deductions 2,500.00 − basic deduction 3,000.00, not below 0.00)
-✓ Tax bracket 0.00–20,000.00 at 10 %: 20,000.00 taxed, tax 2,000.00
-✓ Tax bracket 20,000.00–50,000.00 at 20 %: 19,500.00 taxed, tax 3,900.00
+Säännöt
+✓ Vähennykset tehty: verotettava tulo 39 500,00 (tulot 45 000,00 − vähennykset 2 500,00 − perusvähennys 3 000,00, vähintään 0,00)
+✓ Veroporras 0,00–20 000,00, 10 %: verotettu 20 000,00, vero 2 000,00
+✓ Veroporras 20 000,00–50 000,00, 20 %: verotettu 19 500,00, vero 3 900,00
 
-Result
+Tulos
 ----------------------------------------
-Annual income:         45,000.00
-Deductions:             2,500.00
-Basic deduction:        3,000.00
-Taxable income:        39,500.00
-Calculated tax:         5,900.00
+Vuositulot:            45 000,00
+Vähennykset:            2 500,00
+Perusvähennys:          3 000,00
+Verotettava tulo:      39 500,00
+Laskettu vero:          5 900,00
 
 ...
 
-Processing case: DEMO-003
+Käsitellään tapausta: DEMO-003
 
-Validation
-✗ Deductions must not be negative.
+Tarkistus
+✗ Vähennykset eivät saa olla negatiivisia.
 
-Case rejected. No tax calculated.
+Tapaus hylätty. Veroa ei laskettu.
 
 ----------------------------------------
-Processed 3 cases: 2 calculated, 1 rejected.
-Demo calculation completed.
+Käsitelty 3 tapausta: 2 laskettu, 1 hylätty.
+Esimerkkilaskenta valmis.
 ```
+
+With `--lang en` the same output is in English (`Processing case: DEMO-001`, `Calculated tax:  5,900.00`, …).
 
 Exit codes:
 
@@ -232,6 +261,7 @@ Exit codes:
 | 1 | Configuration error |
 | 2 | Input file error |
 | 3 | Unexpected error |
+| 4 | Invalid `--lang` option |
 
 ### IDEs
 
