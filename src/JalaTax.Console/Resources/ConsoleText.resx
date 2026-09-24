@@ -42,4 +42,13 @@
   <data name="Console_UnexpectedError" xml:space="preserve">
     <value>Unexpected error</value>
   </data>
+  <data name="Console_RuleSet" xml:space="preserve">
+    <value>Rule set: {0}</value>
+  </data>
+  <data name="Console_NotOfficial" xml:space="preserve">
+    <value>Demo calculation, not an official tax calculation.</value>
+  </data>
+  <data name="Console_RulesMissingValue" xml:space="preserve">
+    <value>The --rules option needs a file path.</value>
+  </data>
 </root>

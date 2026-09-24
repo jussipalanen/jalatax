@@ -9,7 +9,8 @@ Imports JalaTax.Core.Services
 ''' <summary>
 ''' Command-line runner: processes every case in the example input (or the file given as an
 ''' argument) and prints validation, rules, result and a summary.
-''' Usage: JalaTax [--lang fi|en] [cases.json]. Finnish is the default language.
+''' Usage: JalaTax [--lang fi|en] [--rules rules.json] [cases.json]. Finnish is the default language
+''' and data/rules.json the default rule set.
 ''' </summary>
 Friend Module Program
 
@@ -37,14 +38,30 @@ Friend Module Program
             Return ExitCode.InvalidArguments
         End Try
 
+        Dim rulesPath = DataPath("rules.json")
+        Dim remainingArguments = otherArguments.ToList()
+        Dim rulesOption = remainingArguments.FindIndex(Function(argument) String.Equals(argument, "--rules", StringComparison.OrdinalIgnoreCase))
+        If rulesOption >= 0 Then
+            If rulesOption + 1 >= remainingArguments.Count Then
+                Console.Error.WriteLine(ConsoleText.Get("Console_RulesMissingValue"))
+                Return ExitCode.InvalidArguments
+            End If
+
+            rulesPath = remainingArguments(rulesOption + 1)
+            remainingArguments.RemoveRange(rulesOption, 2)
+        End If
+
         Console.WriteLine($"{ApplicationInfo.Name} {ApplicationInfo.Version}")
         Console.WriteLine(Separator)
 
         Try
-            Dim rulesPath = DataPath("rules.json")
-            Dim casesPath = If(otherArguments.Count > 0, otherArguments(0), DataPath("example-taxpayer.json"))
+            Dim casesPath = If(remainingArguments.Count > 0, remainingArguments(0), DataPath("example-taxpayer.json"))
 
-            Dim service As New TaxCalculationService(New TaxRuleConfigurationLoader().Load(rulesPath))
+            Dim configuration = New TaxRuleConfigurationLoader().Load(rulesPath)
+            Console.WriteLine(ConsoleText.Get("Console_RuleSet", DisplayText.RuleSetName(configuration)))
+            Console.WriteLine(ConsoleText.Get("Console_NotOfficial"))
+
+            Dim service As New TaxCalculationService(configuration)
             Dim outcomes = TaxCaseLoader.Load(casesPath).Select(Function(taxCase) service.Calculate(taxCase)).ToList()
 
             For Each outcome In outcomes

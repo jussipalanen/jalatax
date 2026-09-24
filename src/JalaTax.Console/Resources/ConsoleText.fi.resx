@@ -42,4 +42,13 @@
   <data name="Console_UnexpectedError" xml:space="preserve">
     <value>Odottamaton virhe</value>
   </data>
+  <data name="Console_RuleSet" xml:space="preserve">
+    <value>Sääntöjoukko: {0}</value>
+  </data>
+  <data name="Console_NotOfficial" xml:space="preserve">
+    <value>Esimerkkilaskenta, ei virallinen verolaskelma.</value>
+  </data>
+  <data name="Console_RulesMissingValue" xml:space="preserve">
+    <value>Valitsin --rules tarvitsee tiedostopolun.</value>
+  </data>
 </root>
