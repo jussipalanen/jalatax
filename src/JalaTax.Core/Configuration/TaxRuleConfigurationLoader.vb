@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Localization
 Imports JalaTax.Core.Services
 
 Namespace Configuration
@@ -7,18 +8,18 @@ Namespace Configuration
     ''' </summary>
     Public NotInheritable Class TaxRuleConfigurationLoader
 
-        Private Const DataName As String = "Configuration"
+        Private Const DataKey As String = "Configuration"
 
         Private ReadOnly _validator As New TaxRuleConfigurationValidator()
 
         ''' <exception cref="ConfigurationException">The file is missing, unreadable or invalid.</exception>
         Public Function Load(filePath As String) As TaxRuleConfiguration
-            Return Validate(JsonFileReader.Read(Of TaxRuleConfiguration)(filePath, DataName, AddressOf CreateException))
+            Return Validate(JsonFileReader.Read(Of TaxRuleConfiguration)(filePath, DataKey, AddressOf CreateException))
         End Function
 
         ''' <exception cref="ConfigurationException">The JSON is invalid or describes an invalid configuration.</exception>
         Public Function Parse(json As String) As TaxRuleConfiguration
-            Return Validate(JsonFileReader.Parse(Of TaxRuleConfiguration)(json, DataName, AddressOf CreateException))
+            Return Validate(JsonFileReader.Parse(Of TaxRuleConfiguration)(json, DataKey, AddressOf CreateException))
         End Function
 
         Private Function Validate(configuration As TaxRuleConfiguration) As TaxRuleConfiguration
@@ -26,7 +27,7 @@ Namespace Configuration
             If Not validation.IsValid Then
                 Dim messages = validation.Errors.Select(Function(problem) problem.Message).ToList()
                 Throw New ConfigurationException(
-                    $"Configuration is invalid:{Environment.NewLine}- {String.Join(Environment.NewLine & "- ", messages)}",
+                    $"{CoreText.Get("Config_InvalidWithErrors")}{Environment.NewLine}- {String.Join(Environment.NewLine & "- ", messages)}",
                     messages)
             End If
 

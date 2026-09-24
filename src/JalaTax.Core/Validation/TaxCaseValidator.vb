@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Localization
 Imports JalaTax.Core.Models
 
 Namespace Validation
@@ -13,16 +14,16 @@ Namespace Validation
             Dim result As New ValidationResult()
 
             If String.IsNullOrWhiteSpace(taxCase.TaxpayerId) Then
-                result.AddError(NameOf(TaxCase.TaxpayerId), "Taxpayer ID is required.")
+                result.AddError(NameOf(TaxCase.TaxpayerId), CoreText.Get("Validation_TaxpayerIdRequired"))
             End If
 
             If taxCase.AnnualIncome < 0D Then
-                result.AddError(NameOf(TaxCase.AnnualIncome), "Annual income must not be negative.")
+                result.AddError(NameOf(TaxCase.AnnualIncome), CoreText.Get("Validation_AnnualIncomeNegative"))
             End If
 
             ' Deductions larger than income are allowed; taxable income is limited to zero during calculation.
             If taxCase.Deductions < 0D Then
-                result.AddError(NameOf(TaxCase.Deductions), "Deductions must not be negative.")
+                result.AddError(NameOf(TaxCase.Deductions), CoreText.Get("Validation_DeductionsNegative"))
             End If
 
             Return result

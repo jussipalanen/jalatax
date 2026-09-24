@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Tax case validation -->
+  <data name="Validation_TaxpayerIdRequired" xml:space="preserve">
+    <value>Taxpayer ID is required.</value>
+  </data>
+  <data name="Validation_AnnualIncomeNegative" xml:space="preserve">
+    <value>Annual income must not be negative.</value>
+  </data>
+  <data name="Validation_DeductionsNegative" xml:space="preserve">
+    <value>Deductions must not be negative.</value>
+  </data>
+  <!-- Configuration validation -->
+  <data name="Config_BasicDeductionNegative" xml:space="preserve">
+    <value>Basic deduction must not be negative.</value>
+  </data>
+  <data name="Config_NoBrackets" xml:space="preserve">
+    <value>At least one tax bracket is required.</value>
+  </data>
+  <data name="Config_EmptyBracket" xml:space="preserve">
+    <value>Tax brackets must not contain empty entries.</value>
+  </data>
+  <data name="Config_FirstBracketMin" xml:space="preserve">
+    <value>Tax bracket 1: min must be 0 so that all income is covered.</value>
+  </data>
+  <data name="Config_RateOutOfRange" xml:space="preserve">
+    <value>Tax bracket {0}: rate must be between 0 and 1.</value>
+  </data>
+  <data name="Config_MaxNotGreaterThanMin" xml:space="preserve">
+    <value>Tax bracket {0}: max must be greater than min.</value>
+  </data>
+  <data name="Config_LastBracketHasMax" xml:space="preserve">
+    <value>Tax bracket {0}: the last bracket must not have a max, so that all income is covered.</value>
+  </data>
+  <data name="Config_OnlyLastBracketOpen" xml:space="preserve">
+    <value>Tax bracket {0}: only the last bracket may omit max.</value>
+  </data>
+  <data name="Config_BracketGap" xml:space="preserve">
+    <value>Tax bracket {0}: min must equal the previous bracket's max ({1}) so that brackets have no gaps or overlaps.</value>
+  </data>
+  <data name="Config_Invalid" xml:space="preserve">
+    <value>Configuration is invalid.</value>
+  </data>
+  <data name="Config_InvalidWithErrors" xml:space="preserve">
+    <value>Configuration is invalid:</value>
+  </data>
+  <!-- Data files -->
+  <data name="Configuration_FileNotFound" xml:space="preserve">
+    <value>Configuration file was not found: {0}</value>
+  </data>
+  <data name="Configuration_FileUnreadable" xml:space="preserve">
+    <value>Configuration file could not be read: {0}</value>
+  </data>
+  <data name="Configuration_JsonInvalid" xml:space="preserve">
+    <value>Configuration JSON is invalid: {0}</value>
+  </data>
+  <data name="Configuration_JsonEmpty" xml:space="preserve">
+    <value>Configuration JSON is empty.</value>
+  </data>
+  <data name="TaxCase_FileNotFound" xml:space="preserve">
+    <value>Tax case file was not found: {0}</value>
+  </data>
+  <data name="TaxCase_FileUnreadable" xml:space="preserve">
+    <value>Tax case file could not be read: {0}</value>
+  </data>
+  <data name="TaxCase_JsonInvalid" xml:space="preserve">
+    <value>Tax case JSON is invalid: {0}</value>
+  </data>
+  <data name="TaxCase_JsonEmpty" xml:space="preserve">
+    <value>Tax case JSON is empty.</value>
+  </data>
+  <data name="TaxCase_NoCases" xml:space="preserve">
+    <value>Tax case JSON contains no tax cases.</value>
+  </data>
+  <data name="TaxCase_EmptyEntries" xml:space="preserve">
+    <value>Tax case JSON must not contain empty entries.</value>
+  </data>
+  <data name="InputData_Invalid" xml:space="preserve">
+    <value>The tax case input data is invalid.</value>
+  </data>
+  <!-- Audit trail -->
+  <data name="Audit_CaseLoaded" xml:space="preserve">
+    <value>Tax case {0} loaded</value>
+  </data>
+  <data name="Audit_NoTaxpayerId" xml:space="preserve">
+    <value>(no taxpayer ID)</value>
+  </data>
+  <data name="Audit_ValidationPassed" xml:space="preserve">
+    <value>Income and deductions validated</value>
+  </data>
+  <data name="Audit_ValidationFailed" xml:space="preserve">
+    <value>Validation failed: {0}</value>
+  </data>
+  <data name="Audit_DeductionsApplied" xml:space="preserve">
+    <value>Deductions applied: taxable income {0} (income {1} − deductions {2} − basic deduction {3}, not below {4})</value>
+  </data>
+  <data name="Audit_BracketApplied" xml:space="preserve">
+    <value>Tax bracket {0} at {1}: {2} taxed, tax {3}</value>
+  </data>
+  <data name="Audit_NoTaxableIncome" xml:space="preserve">
+    <value>No taxable income, no bracket applied: tax {0}</value>
+  </data>
+  <data name="Audit_CalculationCompleted" xml:space="preserve">
+    <value>Calculation completed: taxable income {0}, calculated tax {1}</value>
+  </data>
+  <!-- Event names -->
+  <data name="Event_CaseLoaded" xml:space="preserve">
+    <value>Case loaded</value>
+  </data>
+  <data name="Event_ValidationPassed" xml:space="preserve">
+    <value>Validation passed</value>
+  </data>
+  <data name="Event_ValidationFailed" xml:space="preserve">
+    <value>Validation failed</value>
+  </data>
+  <data name="Event_RuleApplied" xml:space="preserve">
+    <value>Rule applied</value>
+  </data>
+  <data name="Event_CalculationCompleted" xml:space="preserve">
+    <value>Calculation completed</value>
+  </data>
+  <!-- Shared labels -->
+  <data name="Label_TaxpayerId" xml:space="preserve">
+    <value>Taxpayer ID</value>
+  </data>
+  <data name="Label_AnnualIncome" xml:space="preserve">
+    <value>Annual income</value>
+  </data>
+  <data name="Label_Deductions" xml:space="preserve">
+    <value>Deductions</value>
+  </data>
+  <data name="Label_BasicDeduction" xml:space="preserve">
+    <value>Basic deduction</value>
+  </data>
+  <data name="Label_TaxableIncome" xml:space="preserve">
+    <value>Taxable income</value>
+  </data>
+  <data name="Label_CalculatedTax" xml:space="preserve">
+    <value>Calculated tax</value>
+  </data>
+  <data name="Label_Bracket" xml:space="preserve">
+    <value>Bracket {0} at {1}</value>
+  </data>
+</root>

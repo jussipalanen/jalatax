@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <!-- Verotapauksen tarkistus -->
+  <data name="Validation_TaxpayerIdRequired" xml:space="preserve">
+    <value>Verovelvollisen tunniste on pakollinen.</value>
+  </data>
+  <data name="Validation_AnnualIncomeNegative" xml:space="preserve">
+    <value>Vuositulot eivät saa olla negatiivisia.</value>
+  </data>
+  <data name="Validation_DeductionsNegative" xml:space="preserve">
+    <value>Vähennykset eivät saa olla negatiivisia.</value>
+  </data>
+  <!-- Asetusten tarkistus -->
+  <data name="Config_BasicDeductionNegative" xml:space="preserve">
+    <value>Perusvähennys ei saa olla negatiivinen.</value>
+  </data>
+  <data name="Config_NoBrackets" xml:space="preserve">
+    <value>Vähintään yksi veroporras vaaditaan.</value>
+  </data>
+  <data name="Config_EmptyBracket" xml:space="preserve">
+    <value>Veroportaiden joukossa ei saa olla tyhjiä kohtia.</value>
+  </data>
+  <data name="Config_FirstBracketMin" xml:space="preserve">
+    <value>Veroporras 1: alarajan (min) on oltava 0, jotta kaikki tulot kuuluvat johonkin portaaseen.</value>
+  </data>
+  <data name="Config_RateOutOfRange" xml:space="preserve">
+    <value>Veroporras {0}: veroprosentin (rate) on oltava välillä 0–1.</value>
+  </data>
+  <data name="Config_MaxNotGreaterThanMin" xml:space="preserve">
+    <value>Veroporras {0}: ylärajan (max) on oltava suurempi kuin alaraja (min).</value>
+  </data>
+  <data name="Config_LastBracketHasMax" xml:space="preserve">
+    <value>Veroporras {0}: viimeisellä portaalla ei saa olla ylärajaa (max), jotta kaikki tulot kuuluvat johonkin portaaseen.</value>
+  </data>
+  <data name="Config_OnlyLastBracketOpen" xml:space="preserve">
+    <value>Veroporras {0}: vain viimeiseltä portaalta saa puuttua yläraja (max).</value>
+  </data>
+  <data name="Config_BracketGap" xml:space="preserve">
+    <value>Veroporras {0}: alarajan (min) on oltava sama kuin edellisen portaan yläraja ({1}), jotta portaiden väliin ei jää aukkoja tai päällekkäisyyksiä.</value>
+  </data>
+  <data name="Config_Invalid" xml:space="preserve">
+    <value>Asetukset ovat virheelliset.</value>
+  </data>
+  <data name="Config_InvalidWithErrors" xml:space="preserve">
+    <value>Asetukset ovat virheelliset:</value>
+  </data>
+  <!-- Tiedostot -->
+  <data name="Configuration_FileNotFound" xml:space="preserve">
+    <value>Asetustiedostoa ei löytynyt: {0}</value>
+  </data>
+  <data name="Configuration_FileUnreadable" xml:space="preserve">
+    <value>Asetustiedostoa ei voitu lukea: {0}</value>
+  </data>
+  <data name="Configuration_JsonInvalid" xml:space="preserve">
+    <value>Asetustiedoston JSON on virheellinen: {0}</value>
+  </data>
+  <data name="Configuration_JsonEmpty" xml:space="preserve">
+    <value>Asetustiedoston JSON on tyhjä.</value>
+  </data>
+  <data name="TaxCase_FileNotFound" xml:space="preserve">
+    <value>Verotapaustiedostoa ei löytynyt: {0}</value>
+  </data>
+  <data name="TaxCase_FileUnreadable" xml:space="preserve">
+    <value>Verotapaustiedostoa ei voitu lukea: {0}</value>
+  </data>
+  <data name="TaxCase_JsonInvalid" xml:space="preserve">
+    <value>Verotapaustiedoston JSON on virheellinen: {0}</value>
+  </data>
+  <data name="TaxCase_JsonEmpty" xml:space="preserve">
+    <value>Verotapaustiedoston JSON on tyhjä.</value>
+  </data>
+  <data name="TaxCase_NoCases" xml:space="preserve">
+    <value>Verotapaustiedostossa ei ole yhtään verotapausta.</value>
+  </data>
+  <data name="TaxCase_EmptyEntries" xml:space="preserve">
+    <value>Verotapaustiedostossa ei saa olla tyhjiä kohtia.</value>
+  </data>
+  <data name="InputData_Invalid" xml:space="preserve">
+    <value>Verotapausten syötetiedot ovat virheelliset.</value>
+  </data>
+  <!-- Kirjausketju -->
+  <data name="Audit_CaseLoaded" xml:space="preserve">
+    <value>Verotapaus {0} ladattu</value>
+  </data>
+  <data name="Audit_NoTaxpayerId" xml:space="preserve">
+    <value>(ei tunnistetta)</value>
+  </data>
+  <data name="Audit_ValidationPassed" xml:space="preserve">
+    <value>Tulot ja vähennykset tarkistettu</value>
+  </data>
+  <data name="Audit_ValidationFailed" xml:space="preserve">
+    <value>Tarkistus hylätty: {0}</value>
+  </data>
+  <data name="Audit_DeductionsApplied" xml:space="preserve">
+    <value>Vähennykset tehty: verotettava tulo {0} (tulot {1} − vähennykset {2} − perusvähennys {3}, vähintään {4})</value>
+  </data>
+  <data name="Audit_BracketApplied" xml:space="preserve">
+    <value>Veroporras {0}, {1}: verotettu {2}, vero {3}</value>
+  </data>
+  <data name="Audit_NoTaxableIncome" xml:space="preserve">
+    <value>Ei verotettavaa tuloa, veroporrasta ei sovellettu: vero {0}</value>
+  </data>
+  <data name="Audit_CalculationCompleted" xml:space="preserve">
+    <value>Laskenta valmis: verotettava tulo {0}, laskettu vero {1}</value>
+  </data>
+  <!-- Tapahtumien nimet -->
+  <data name="Event_CaseLoaded" xml:space="preserve">
+    <value>Tapaus ladattu</value>
+  </data>
+  <data name="Event_ValidationPassed" xml:space="preserve">
+    <value>Tarkistus hyväksytty</value>
+  </data>
+  <data name="Event_ValidationFailed" xml:space="preserve">
+    <value>Tarkistus hylätty</value>
+  </data>
+  <data name="Event_RuleApplied" xml:space="preserve">
+    <value>Sääntö sovellettu</value>
+  </data>
+  <data name="Event_CalculationCompleted" xml:space="preserve">
+    <value>Laskenta valmis</value>
+  </data>
+  <!-- Yhteiset nimikkeet -->
+  <data name="Label_TaxpayerId" xml:space="preserve">
+    <value>Tunniste</value>
+  </data>
+  <data name="Label_AnnualIncome" xml:space="preserve">
+    <value>Vuositulot</value>
+  </data>
+  <data name="Label_Deductions" xml:space="preserve">
+    <value>Vähennykset</value>
+  </data>
+  <data name="Label_BasicDeduction" xml:space="preserve">
+    <value>Perusvähennys</value>
+  </data>
+  <data name="Label_TaxableIncome" xml:space="preserve">
+    <value>Verotettava tulo</value>
+  </data>
+  <data name="Label_CalculatedTax" xml:space="preserve">
+    <value>Laskettu vero</value>
+  </data>
+  <data name="Label_Bracket" xml:space="preserve">
+    <value>Veroporras {0}, {1}</value>
+  </data>
+</root>

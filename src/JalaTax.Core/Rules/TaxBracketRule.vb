@@ -1,4 +1,5 @@
 Imports JalaTax.Core.Audit
+Imports JalaTax.Core.Localization
 
 Namespace Rules
 
@@ -35,15 +36,18 @@ Namespace Rules
 
                 context.AuditLog.Record(
                     AuditEventType.RuleApplied,
-                    $"Tax bracket {DisplayFormat.BracketRange(bracket)} at {DisplayFormat.Rate(bracket.Rate)}: " &
-                    $"{DisplayFormat.Amount(taxedAmount)} taxed, tax {DisplayFormat.Amount(tax)}",
+                    CoreText.Get("Audit_BracketApplied",
+                                 DisplayFormat.BracketRange(bracket),
+                                 DisplayFormat.Rate(bracket.Rate),
+                                 DisplayFormat.Amount(taxedAmount),
+                                 DisplayFormat.Amount(tax)),
                     Name)
             Next
 
             context.CalculatedTax = Math.Round(totalTax, 2, MidpointRounding.AwayFromZero)
 
             If context.BracketTaxes.Count = 0 Then
-                context.AuditLog.Record(AuditEventType.RuleApplied, "No taxable income, no bracket applied: tax 0.00", Name)
+                context.AuditLog.Record(AuditEventType.RuleApplied, CoreText.Get("Audit_NoTaxableIncome", DisplayFormat.Amount(0D)), Name)
             End If
         End Sub
 

@@ -1,3 +1,4 @@
+Imports JalaTax.Core.Localization
 Namespace Configuration
 
     ''' <summary>
@@ -7,7 +8,7 @@ Namespace Configuration
         Inherits Exception
 
         Public Sub New()
-            MyBase.New("The tax rule configuration is invalid.")
+            MyBase.New(CoreText.Get("Config_Invalid"))
         End Sub
 
         Public Sub New(message As String)

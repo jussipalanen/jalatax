@@ -1,4 +1,5 @@
 Imports JalaTax.Core.Audit
+Imports JalaTax.Core.Localization
 
 Namespace Rules
 
@@ -25,9 +26,12 @@ Namespace Rules
 
             context.AuditLog.Record(
                 AuditEventType.RuleApplied,
-                $"Deductions applied: taxable income {DisplayFormat.Amount(context.TaxableIncome)} " &
-                $"(income {DisplayFormat.Amount(annualIncome)} − deductions {DisplayFormat.Amount(deductions)} " &
-                $"− basic deduction {DisplayFormat.Amount(basicDeduction)}, not below 0.00)",
+                CoreText.Get("Audit_DeductionsApplied",
+                             DisplayFormat.Amount(context.TaxableIncome),
+                             DisplayFormat.Amount(annualIncome),
+                             DisplayFormat.Amount(deductions),
+                             DisplayFormat.Amount(basicDeduction),
+                             DisplayFormat.Amount(0D)),
                 Name)
         End Sub
 
