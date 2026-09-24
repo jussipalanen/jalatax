@@ -6,7 +6,7 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-In progress. The solution structure, code standards and domain models are in place. Configuration loading, validation, the tax rules and the audit trail are not implemented yet.
+In progress. The solution structure, code standards, domain models and configuration loading are in place. Input validation, the tax rules and the audit trail are not implemented yet.
 
 ## Calculation rules
 
@@ -16,6 +16,30 @@ These are the agreed rules for the fictional calculation. The domain models desc
 2. **Progressive brackets:** each bracket's rate applies only to the part of taxable income inside that bracket. With the example brackets (0–20,000 at 10 %, 20,000–50,000 at 20 %, 50,000+ at 30 %), a taxable income of 42,500 is taxed 20,000 × 10 % + 22,500 × 20 % = 6,500.
 3. **Bracket boundaries** include the lower bound and exclude the upper bound, so exactly 20,000 falls in the 20,000–50,000 bracket. The top bracket has no upper bound.
 4. **Rounding:** amounts use `Decimal`, and the calculated tax is rounded to 2 decimals with halves rounded away from zero.
+
+## Configuration
+
+The rules are read from [data/rules.json](data/rules.json):
+
+```json
+{
+  "basicDeduction": 3000,
+  "taxBrackets": [
+    { "min": 0,     "max": 20000, "rate": 0.10 },
+    { "min": 20000, "max": 50000, "rate": 0.20 },
+    { "min": 50000, "max": null,  "rate": 0.30 }
+  ]
+}
+```
+
+`basicDeduction`, `taxBrackets`, `min` and `rate` are required; `max` is left out or `null` only for the last bracket. Comments and trailing commas are allowed.
+
+`TaxRuleConfigurationLoader` rejects the file with a `ConfigurationException` that lists every problem found when:
+
+- the file is missing or cannot be read
+- the JSON is malformed, a required value is missing, or a property name is unknown (for example a typo)
+- the basic deduction is negative or a rate is outside 0–1
+- there are no brackets, the first bracket does not start at 0, brackets have gaps or overlaps, `max` is not greater than `min`, or an open-ended bracket is not the last one
 
 ## Technology stack
 
