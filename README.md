@@ -6,17 +6,19 @@
 
 JalaTax is a small VB.NET demo application that shows configurable business rules, input validation, rule processing, error handling, audit logging and unit testing.
 
-> **Disclaimer:** JalaTax is a fictional demonstration. All tax rules, rates and data in this repository are made up for demo purposes. They are not current Finnish tax rules and do not reproduce or claim compatibility with any real tax administration system.
+**Suomeksi:** [README.fi.md](README.fi.md) has a Finnish summary and user guide (tiivistelmä ja käyttöohje).
+
+> **Disclaimer:** JalaTax is a demonstration, and **no result is an official tax calculation**. The default rules and all example data are fictional. The optional rule set `data/rules-fi-2026.json` uses the published 2026 Finnish state income tax scale, simplified to state income tax only (see [Rule sets](#rule-sets)). JalaTax does not reproduce or claim compatibility with any real tax administration system.
 
 ## Status
 
-In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation, the audit trail, the Windows Forms desktop application, the console runner and Finnish/English translations are in place.
+Version 1.0.0. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation, the audit trail, the Windows Forms desktop application, the console runner, Finnish/English translations and selectable rule sets (including the simplified 2026 Finnish state income tax scale) are in place.
 
 ![JalaTax desktop application](docs/screenshots/calculation-demo-001-fi.png)
 
 ## Calculation rules
 
-The fictional calculation follows these rules:
+Every rule set is calculated with the same rules:
 
 1. **Taxable income** = annual income − the case's deductions − the configured basic deduction, and never below 0.
 2. **Progressive brackets:** each bracket's rate applies only to the part of taxable income inside that bracket. With the example brackets (0–20,000 at 10 %, 20,000–50,000 at 20 %, 50,000+ at 30 %), a taxable income of 42,500 is taxed 20,000 × 10 % + 22,500 × 20 % = 6,500.
@@ -33,9 +35,9 @@ The fictional calculation follows these rules:
    - `TaxBracketRule` taxes each bracket's part and rounds the total (rules 2–4). It also records the tax per bracket.
 3. The service returns a `CalculationOutcome` with the `TaxResult`, the tax per bracket and the validation result.
 
-Each rule implements `ITaxRule` and can be tested on its own. The rules read all amounts from `data/rules.json`; no rates or limits are hard-coded.
+Each rule implements `ITaxRule` and can be tested on its own. The rules read all amounts from the selected rule set file; no rates or limits are hard-coded.
 
-Results for the example cases:
+Results for the example cases with the default (fictional) rules:
 
 | Case | Income | Deductions | Basic deduction | Taxable income | Tax |
 |---|---:|---:|---:|---:|---:|
@@ -53,6 +55,7 @@ Audit trail for DEMO-001:
 |---|---|---|
 | CaseLoaded | | Tax case DEMO-001 loaded |
 | ValidationPassed | | Income and deductions validated |
+| RuleSetSelected | | Rule set: Fictional demo rules |
 | RuleApplied | DeductionRule | Deductions applied: taxable income 39,500.00 (income 45,000.00 − deductions 2,500.00 − basic deduction 3,000.00, not below 0.00) |
 | RuleApplied | TaxBracketRule | Tax bracket 0.00–20,000.00 at 10 %: 20,000.00 taxed, tax 2,000.00 |
 | RuleApplied | TaxBracketRule | Tax bracket 20,000.00–50,000.00 at 20 %: 19,500.00 taxed, tax 3,900.00 |
@@ -60,16 +63,18 @@ Audit trail for DEMO-001:
 
 An invalid case records one `ValidationFailed` entry per problem, and processing stops there.
 
-- **Numbers** in audit text always use the same format (`45,000.00`), whatever the computer's regional settings.
+- **Numbers** in audit text follow the application language (`45,000.00` in English, `45 000,00` in Finnish), not the computer's regional settings.
+- **Rule set:** the entry `RuleSetSelected` records which rule set produced the result.
 - **Timestamps** come from .NET's `TimeProvider`, so tests use a fixed clock.
 - **Identifiers:** entries contain only the fictional case ID and amounts.
 
 ## Configuration
 
-The rules are read from [data/rules.json](data/rules.json):
+The rules are read from a rule set file, by default [data/rules.json](data/rules.json):
 
 ```json
 {
+  "names": { "fi": "Kuvitteelliset esimerkkisäännöt", "en": "Fictional demo rules" },
   "basicDeduction": 3000,
   "taxBrackets": [
     { "min": 0,     "max": 20000, "rate": 0.10 },
@@ -79,7 +84,7 @@ The rules are read from [data/rules.json](data/rules.json):
 }
 ```
 
-`basicDeduction`, `taxBrackets`, `min` and `rate` are required; `max` is left out or `null` only for the last bracket. Comments and trailing commas are allowed.
+`basicDeduction`, `taxBrackets`, `min` and `rate` are required; `max` is left out or `null` only for the last bracket. `names` (the rule set's name per language) is optional. Comments and trailing commas are allowed.
 
 `TaxRuleConfigurationLoader` rejects the file with a `ConfigurationException` that lists every problem found when:
 
@@ -87,6 +92,43 @@ The rules are read from [data/rules.json](data/rules.json):
 - the JSON is malformed, a required value is missing, or a property name is unknown (for example a typo)
 - the basic deduction is negative or a rate is outside 0–1
 - there are no brackets, the first bracket does not start at 0, brackets have gaps or overlaps, `max` is not greater than `min`, or an open-ended bracket is not the last one
+
+### Rule sets
+
+Every `data/rules*.json` file is a rule set. Two are included:
+
+| File | Name | Content |
+|---|---|---|
+| `rules.json` (default) | Fictional demo rules | Made-up basic deduction and three brackets |
+| `rules-fi-2026.json` | State income tax scale 2026 (simplified) | The published 2026 Finnish state income tax scale |
+
+**Choosing a rule set:**
+- **Desktop app:** the **Säännöt / Rules** switcher in the status bar, or `--rules rules-fi-2026.json` at startup.
+- **Console:** `--rules <path>`.
+
+The audit trail records the rule set used.
+
+**The 2026 state income tax scale** comes from *Laki vuoden 2026 tuloveroasteikosta* (1140/2025):
+
+| Taxable earned income (€) | Tax at lower limit (€) | Rate on the excess |
+|---|---:|---:|
+| 0 – 22,000 | 0.00 | 12.64 % |
+| 22,000 – 32,600 | 2,780.80 | 19.00 % |
+| 32,600 – 40,100 | 4,794.80 | 30.25 % |
+| 40,100 – 52,100 | 7,063.55 | 33.25 % |
+| 52,100 – | 11,053.55 | 37.50 % |
+
+It is **simplified on purpose**: only the state income tax on taxable earned income is calculated.
+- **Left out:** municipal tax, church tax, health insurance contributions, and tax credits such as the earned income deduction (työtulovähennys).
+- **Deductions:** the case's deductions are subtracted from income, and there is no basic deduction.
+- **Tests:** the engine reproduces the published "tax at lower limit" for every bracket.
+
+| Case | Taxable income | State income tax |
+|---|---:|---:|
+| DEMO-001 | 42,500 | **7,861.55** |
+| DEMO-002 | 66,800 | **16,566.05** |
+
+![2026 state income tax scale, DEMO-002](docs/screenshots/finnish-scale-2026-demo-002-fi.png)
 
 ## Tax case input
 
@@ -180,14 +222,15 @@ dotnet build
 ### Desktop application (Windows)
 
 ```powershell
-dotnet run --project src/JalaTax.WinForms                 # Finnish (default)
-dotnet run --project src/JalaTax.WinForms -- --lang en    # English
+dotnet run --project src/JalaTax.WinForms                                # Finnish (default)
+dotnet run --project src/JalaTax.WinForms -- --lang en                   # English
+dotnet run --project src/JalaTax.WinForms -- --rules rules-fi-2026.json  # 2026 state income tax scale
 ```
 
 1. Pick an example case (`DEMO-001` to `DEMO-003`), or type a taxpayer ID, annual income and deductions.
 2. Press **Laske** / **Calculate** (or Enter).
 3. The **Tulos** / **Result** panel shows the amounts and the tax per bracket. The **Kirjausketju** / **Audit trail** lists every processing step. Invalid input is marked next to the field, with the message below the buttons.
-4. Switch the language from **Kieli: Suomi** / **Language: English** at the bottom right. The current result is recalculated in the new language.
+4. Switch the rule set from **Säännöt** / **Rules** and the language from **Kieli: Suomi** / **Language: English** at the bottom right. The current case is recalculated after either switch.
 
 Amounts can be typed in your regional format (for example `45000,50` with Finnish regional settings).
 
@@ -208,16 +251,19 @@ The desktop app needs Windows. The rest of the solution builds and runs on any p
 ### Console runner
 
 ```powershell
-dotnet run --project src/JalaTax.Console                               # Finnish (default)
-dotnet run --project src/JalaTax.Console -- --lang en                  # English
+dotnet run --project src/JalaTax.Console                                     # Finnish (default)
+dotnet run --project src/JalaTax.Console -- --lang en                        # English
+dotnet run --project src/JalaTax.Console -- --rules data/rules-fi-2026.json  # 2026 state income tax scale
 dotnet run --project src/JalaTax.Console -- --lang en path\to\cases.json
 ```
 
-The runner processes `data/example-taxpayer.json`, or the file given as an argument:
+`--rules` takes a file path (relative to the current directory, or absolute). Without it, the runner uses the demo rules next to the program. It processes `data/example-taxpayer.json`, or the file given as an argument:
 
 ```text
 JalaTax 1.0.0
 ----------------------------------------
+Sääntöjoukko: Kuvitteelliset esimerkkisäännöt
+Esimerkkilaskenta, ei virallinen verolaskelma.
 
 Käsitellään tapausta: DEMO-001
 
@@ -261,7 +307,7 @@ Exit codes:
 | 1 | Configuration error |
 | 2 | Input file error |
 | 3 | Unexpected error |
-| 4 | Invalid `--lang` option |
+| 4 | Invalid `--lang` or `--rules` option |
 
 ### IDEs
 
