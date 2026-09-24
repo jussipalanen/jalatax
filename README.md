@@ -6,7 +6,7 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-In progress. The solution structure, code standards, domain models, configuration loading, input validation and the tax calculation are in place. The audit trail and the Windows Forms application are not implemented yet.
+In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation and the audit trail are in place. The Windows Forms application is not implemented yet.
 
 ## Calculation rules
 
@@ -36,6 +36,27 @@ Results for the example cases:
 | DEMO-001 | 45,000 | 2,500 | 3,000 | 39,500 | 20,000 × 10 % + 19,500 × 20 % = **5,900** |
 | DEMO-002 | 68,000 | 1,200 | 3,000 | 63,800 | 2,000 + 6,000 + 13,800 × 30 % = **12,140** |
 | DEMO-003 | 30,000 | −500 | – | – | Rejected: deductions must not be negative |
+
+## Audit trail
+
+Every processed case returns its audit trail in `CalculationOutcome.AuditEntries`. Each `AuditEntry` has a timestamp, an event type, a description and, for rule events, the rule name. The service records the case, validation and completion events; each rule records what it did.
+
+Audit trail for DEMO-001:
+
+| Event | Rule | Description |
+|---|---|---|
+| CaseLoaded | | Tax case DEMO-001 loaded |
+| ValidationPassed | | Income and deductions validated |
+| RuleApplied | DeductionRule | Deductions applied: taxable income 39,500.00 (income 45,000.00 − deductions 2,500.00 − basic deduction 3,000.00, not below 0.00) |
+| RuleApplied | TaxBracketRule | Tax bracket 0.00–20,000.00 at 10 %: 20,000.00 taxed, tax 2,000.00 |
+| RuleApplied | TaxBracketRule | Tax bracket 20,000.00–50,000.00 at 20 %: 19,500.00 taxed, tax 3,900.00 |
+| CalculationCompleted | | Calculation completed: taxable income 39,500.00, calculated tax 5,900.00 |
+
+An invalid case records one `ValidationFailed` entry per problem, and processing stops there.
+
+- **Numbers** in audit text always use the same format (`45,000.00`), whatever the computer's regional settings.
+- **Timestamps** come from .NET's `TimeProvider`, so tests use a fixed clock.
+- **Identifiers:** entries contain only the fictional case ID and amounts.
 
 ## Configuration
 

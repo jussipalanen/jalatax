@@ -1,26 +1,32 @@
+Imports JalaTax.Core.Audit
 Imports JalaTax.Core.Configuration
 Imports JalaTax.Core.Models
 
 Namespace Rules
 
     ''' <summary>
-    ''' Working state for one calculation: the input, the configuration and the values rules produce.
+    ''' Working state for one calculation: the input, the configuration, the values rules produce
+    ''' and the audit log rules write to.
     ''' </summary>
     Public NotInheritable Class TaxCalculationContext
 
         Private ReadOnly _bracketTaxes As New List(Of BracketTax)()
 
-        Public Sub New(taxCase As TaxCase, configuration As TaxRuleConfiguration)
+        ''' <param name="auditLog">Log for rule events; a new log using the system clock when omitted.</param>
+        Public Sub New(taxCase As TaxCase, configuration As TaxRuleConfiguration, Optional auditLog As AuditLog = Nothing)
             ArgumentNullException.ThrowIfNull(taxCase)
             ArgumentNullException.ThrowIfNull(configuration)
 
             Me.TaxCase = taxCase
             Me.Configuration = configuration
+            Me.AuditLog = If(auditLog, New AuditLog(TimeProvider.System))
         End Sub
 
         Public ReadOnly Property TaxCase As TaxCase
 
         Public ReadOnly Property Configuration As TaxRuleConfiguration
+
+        Public ReadOnly Property AuditLog As AuditLog
 
         Public Property TaxableIncome As Decimal
 

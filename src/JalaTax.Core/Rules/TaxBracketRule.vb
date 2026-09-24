@@ -1,3 +1,5 @@
+Imports JalaTax.Core.Audit
+
 Namespace Rules
 
     ''' <summary>
@@ -30,10 +32,28 @@ Namespace Rules
                 Dim tax = taxedAmount * bracket.Rate
                 context.AddBracketTax(New BracketTax(bracket, taxedAmount, tax))
                 totalTax += tax
+
+                context.AuditLog.Record(
+                    AuditEventType.RuleApplied,
+                    $"Tax bracket {DescribeRange(bracket)} at {AuditFormat.Rate(bracket.Rate)}: " &
+                    $"{AuditFormat.Amount(taxedAmount)} taxed, tax {AuditFormat.Amount(tax)}",
+                    Name)
             Next
 
             context.CalculatedTax = Math.Round(totalTax, 2, MidpointRounding.AwayFromZero)
+
+            If context.BracketTaxes.Count = 0 Then
+                context.AuditLog.Record(AuditEventType.RuleApplied, "No taxable income, no bracket applied: tax 0.00", Name)
+            End If
         End Sub
+
+        Private Shared Function DescribeRange(bracket As Configuration.TaxBracket) As String
+            If bracket.Max.HasValue Then
+                Return $"{AuditFormat.Amount(bracket.Min)}–{AuditFormat.Amount(bracket.Max.Value)}"
+            End If
+
+            Return $"{AuditFormat.Amount(bracket.Min)}+"
+        End Function
 
     End Class
 
