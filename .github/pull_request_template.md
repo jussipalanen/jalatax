@@ -18,3 +18,4 @@ Closes #
 - [ ] Tests added or updated for changed behavior
 - [ ] Only fictional demo data (no real identifiers, personal data or secrets)
 - [ ] README updated if externally visible behavior changed
+- [ ] `CHANGELOG.md` updated under `## [Unreleased]` (or a new version section, together with `<Version>` in `Directory.Build.props`, when releasing)

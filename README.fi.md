@@ -236,8 +236,20 @@ dotnet test                         # 173 testiä
 
 Samat tarkistukset ajetaan GitHub Actionsissa jokaiselle pull requestille.
 
+## Versiot ja julkaisut
+
+JalaTax käyttää semanttista versiointia (`major.minor.patch`). Versio on yhdessä paikassa, `Directory.Build.props`-tiedostossa. Muutokset kirjataan [CHANGELOG.md](CHANGELOG.md)-tiedostoon.
+
+Jokainen julkaisu on Git-tagi `vX.Y.Z` ja GitHub Release, jossa on valmiit zip-paketit työpöytäsovelluksesta ja komentorivisovelluksesta. Uusi versio julkaistaan näin:
+
+1. Päivitä pull requestissa `Directory.Build.props`-tiedoston versio ja lisää CHANGELOG.md:hen uuden version osio.
+2. Yhdistä pull request. GitHub Actions huomaa, ettei versiolle ole vielä tagia. Se kääntää ja testaa ratkaisun, luo tagin ja julkaisee Releasen.
+
+Testit varmistavat, että CHANGELOG.md:ssä on osio nykyiselle versiolle, joten ilman muutoskuvausta ei voi julkaista.
+
 ## Lisätietoa
 
 - [README.md](README.md): tekninen kuvaus englanniksi (arkkitehtuuri, rakenne, konfiguraatio)
 - [AGENTS.md](AGENTS.md): kehitysohjeet ja periaatteet
-- Versio: 1.0.0 (`Directory.Build.props`)
+- [CHANGELOG.md](CHANGELOG.md): versiohistoria
+- [Releases](https://github.com/jussipalanen/jalatax/releases): ladattavat versiot

@@ -348,9 +348,32 @@ To fix formatting and code style issues automatically:
 dotnet format
 ```
 
-## Versioning
+## Versioning and releases
 
-The version is set once, in `Directory.Build.props` (`<Version>1.0.0</Version>`), and every project uses it. The desktop app's **About** dialog and the console header (`JalaTax 1.0.0`) read it through `ApplicationInfo.Version` in `JalaTax.Core`. To release a new version, update that value, following [semantic versioning](https://semver.org/) (major.minor.patch).
+JalaTax uses [semantic versioning](https://semver.org/):
+- **major:** incompatible changes, such as a new rule file format
+- **minor:** new features
+- **patch:** fixes
+
+The version is set once, in `Directory.Build.props` (`<Version>1.0.0</Version>`), and every project uses it. The desktop app's **About** dialog and the console header (`JalaTax 1.0.0`) read it through `ApplicationInfo.Version`.
+
+**Changes are recorded in [CHANGELOG.md](CHANGELOG.md)** ([Keep a Changelog](https://keepachangelog.com/) format). Every pull request adds its user-visible changes under `## [Unreleased]`.
+
+**Each release is a Git tag `vX.Y.Z` with a GitHub Release.** The [release workflow](.github/workflows/release.yml) creates both automatically.
+
+To release a new version:
+
+1. In a pull request, set the new `<Version>` in `Directory.Build.props`.
+2. In `CHANGELOG.md`, rename `## [Unreleased]` to `## [X.Y.Z] - YYYY-MM-DD`, add a new empty `## [Unreleased]` above it, and add the link definitions at the bottom.
+3. Merge the pull request. On `main`, the workflow notices that tag `vX.Y.Z` does not exist yet. It builds and tests the solution, creates the tag, and publishes a GitHub Release. The release notes are the version's changelog section, and two zip packages are attached:
+   - `JalaTax-X.Y.Z-windows-x64.zip`: the desktop app (needs the .NET 10 Desktop Runtime)
+   - `JalaTax-X.Y.Z-console.zip`: the console runner (needs the .NET 10 Runtime, any OS)
+
+You can also push a tag yourself (`git tag v1.1.0 && git push origin v1.1.0`). The workflow then releases it, after checking that the tag matches `Directory.Build.props`.
+
+Two safety nets:
+- **Tests:** they check that `CHANGELOG.md` has a section for the current version, so a version bump without release notes fails CI before anything is released.
+- **No overwrites:** an existing release is never replaced.
 
 ## Contributing
 
