@@ -11,4 +11,8 @@
     <ProjectReference Include="..\JalaTax.Core\JalaTax.Core.vbproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\data\*.json" Link="data\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

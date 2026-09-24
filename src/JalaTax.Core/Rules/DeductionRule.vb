@@ -25,9 +25,9 @@ Namespace Rules
 
             context.AuditLog.Record(
                 AuditEventType.RuleApplied,
-                $"Deductions applied: taxable income {AuditFormat.Amount(context.TaxableIncome)} " &
-                $"(income {AuditFormat.Amount(annualIncome)} − deductions {AuditFormat.Amount(deductions)} " &
-                $"− basic deduction {AuditFormat.Amount(basicDeduction)}, not below 0.00)",
+                $"Deductions applied: taxable income {DisplayFormat.Amount(context.TaxableIncome)} " &
+                $"(income {DisplayFormat.Amount(annualIncome)} − deductions {DisplayFormat.Amount(deductions)} " &
+                $"− basic deduction {DisplayFormat.Amount(basicDeduction)}, not below 0.00)",
                 Name)
         End Sub
 

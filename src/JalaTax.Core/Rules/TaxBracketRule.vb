@@ -35,8 +35,8 @@ Namespace Rules
 
                 context.AuditLog.Record(
                     AuditEventType.RuleApplied,
-                    $"Tax bracket {DescribeRange(bracket)} at {AuditFormat.Rate(bracket.Rate)}: " &
-                    $"{AuditFormat.Amount(taxedAmount)} taxed, tax {AuditFormat.Amount(tax)}",
+                    $"Tax bracket {DisplayFormat.BracketRange(bracket)} at {DisplayFormat.Rate(bracket.Rate)}: " &
+                    $"{DisplayFormat.Amount(taxedAmount)} taxed, tax {DisplayFormat.Amount(tax)}",
                     Name)
             Next
 
@@ -46,14 +46,6 @@ Namespace Rules
                 context.AuditLog.Record(AuditEventType.RuleApplied, "No taxable income, no bracket applied: tax 0.00", Name)
             End If
         End Sub
-
-        Private Shared Function DescribeRange(bracket As Configuration.TaxBracket) As String
-            If bracket.Max.HasValue Then
-                Return $"{AuditFormat.Amount(bracket.Min)}–{AuditFormat.Amount(bracket.Max.Value)}"
-            End If
-
-            Return $"{AuditFormat.Amount(bracket.Min)}+"
-        End Function
 
     End Class
 
