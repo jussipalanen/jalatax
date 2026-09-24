@@ -153,4 +153,11 @@
   <data name="Label_Bracket" xml:space="preserve">
     <value>Bracket {0} at {1}</value>
   </data>
+  <!-- Language option -->
+  <data name="Language_MissingValue" xml:space="preserve">
+    <value>The --lang option needs a value: {0}.</value>
+  </data>
+  <data name="Language_Unsupported" xml:space="preserve">
+    <value>Unsupported language '{0}'. Use one of: {1}.</value>
+  </data>
 </root>

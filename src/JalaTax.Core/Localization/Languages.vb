@@ -48,6 +48,42 @@ Namespace Localization
             Return If(Current = Finnish, FinnishCulture, CultureInfo.InvariantCulture)
         End Function
 
+        ''' <summary>
+        ''' Reads the "--lang fi|en" option shared by the desktop app and the console runner.
+        ''' Returns the default language when the option is absent.
+        ''' </summary>
+        ''' <param name="otherArguments">The arguments that remain after removing the option.</param>
+        ''' <exception cref="ArgumentException">The option has no value or names an unsupported language.</exception>
+        Public Function FromCommandLine(args As IEnumerable(Of String), ByRef otherArguments As IReadOnlyList(Of String)) As String
+            ArgumentNullException.ThrowIfNull(args)
+
+            Dim remaining As New List(Of String)()
+            Dim language = DefaultLanguage
+            Dim argumentList = args.ToList()
+
+            Dim index = 0
+            While index < argumentList.Count
+                If String.Equals(argumentList(index), "--lang", StringComparison.OrdinalIgnoreCase) Then
+                    If index + 1 >= argumentList.Count Then
+                        Throw New ArgumentException(CoreText.Get("Language_MissingValue", String.Join(", ", Supported)))
+                    End If
+
+                    language = argumentList(index + 1)
+                    If Not IsSupported(language) Then
+                        Throw New ArgumentException(CoreText.Get("Language_Unsupported", language, String.Join(", ", Supported)))
+                    End If
+
+                    index += 2
+                Else
+                    remaining.Add(argumentList(index))
+                    index += 1
+                End If
+            End While
+
+            otherArguments = remaining.AsReadOnly()
+            Return Normalize(language)
+        End Function
+
         Private Function Normalize(languageCode As String) As String
             Return If(languageCode, String.Empty).Trim().ToLowerInvariant()
         End Function

@@ -18,6 +18,11 @@ Public Module DisplayFormat
         Return (value * 100D).ToString("0.##", Languages.NumberCulture()) & " %"
     End Function
 
+    ''' <summary>Local time of day, for example 14:05:09 (English) or 14.05.09 (Finnish).</summary>
+    Public Function Time(value As DateTimeOffset) As String
+        Return value.ToLocalTime().ToString("HH:mm:ss", Languages.NumberCulture())
+    End Function
+
     ''' <summary>For example 0.00–20,000.00, or 50,000.00+ for the top bracket.</summary>
     Public Function BracketRange(bracket As TaxBracket) As String
         ArgumentNullException.ThrowIfNull(bracket)

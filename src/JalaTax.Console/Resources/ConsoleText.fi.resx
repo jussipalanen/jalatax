@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Console_ProcessingCase" xml:space="preserve">
+    <value>Käsitellään tapausta: {0}</value>
+  </data>
+  <data name="Console_Validation" xml:space="preserve">
+    <value>Tarkistus</value>
+  </data>
+  <data name="Console_Rules" xml:space="preserve">
+    <value>Säännöt</value>
+  </data>
+  <data name="Console_Result" xml:space="preserve">
+    <value>Tulos</value>
+  </data>
+  <data name="Console_CaseRejected" xml:space="preserve">
+    <value>Tapaus hylätty. Veroa ei laskettu.</value>
+  </data>
+  <data name="Console_Summary" xml:space="preserve">
+    <value>Käsitelty {0} tapausta: {1} laskettu, {2} hylätty.</value>
+  </data>
+  <data name="Console_Completed" xml:space="preserve">
+    <value>Esimerkkilaskenta valmis.</value>
+  </data>
+  <data name="Console_ConfigError" xml:space="preserve">
+    <value>Asetusvirhe</value>
+  </data>
+  <data name="Console_InputError" xml:space="preserve">
+    <value>Syötevirhe</value>
+  </data>
+  <data name="Console_UnexpectedError" xml:space="preserve">
+    <value>Odottamaton virhe</value>
+  </data>
+</root>
