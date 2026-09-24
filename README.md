@@ -6,7 +6,9 @@ JalaTax is a small VB.NET demo application that shows configurable business rule
 
 ## Status
 
-In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation and the audit trail are in place. The Windows Forms application is not implemented yet.
+In progress. The solution structure, code standards, domain models, configuration loading, input validation, the tax calculation, the audit trail, the Windows Forms desktop application and the console runner are in place.
+
+![JalaTax desktop application](docs/screenshots/main-window.png)
 
 ## Calculation rules
 
@@ -109,7 +111,7 @@ Loading and validation are separate steps:
 ## Technology stack
 
 - VB.NET on .NET 10
-- Windows Forms desktop application (main UI, planned in #11), console runner and class library
+- Windows Forms desktop application (main UI), console runner and class library
 - MSTest (Microsoft.Testing.Platform runner)
 - System.Text.Json and JSON configuration files
 
@@ -123,13 +125,15 @@ JalaTax/
 ├── global.json                .NET SDK version and test runner
 ├── src/
 │   ├── JalaTax.Core/          Domain models and business logic
-│   └── JalaTax.Console/       Console entry point (Program.vb)
+│   ├── JalaTax.WinForms/      Windows Forms desktop app (main UI)
+│   └── JalaTax.Console/       Command-line runner
 ├── tests/
 │   └── JalaTax.Tests/         MSTest tests for JalaTax.Core
-└── data/                      JSON rules and example input
+├── data/                      JSON rules and example input
+└── docs/screenshots/          Screenshots of the desktop app
 ```
 
-`JalaTax.Core` must not depend on the console application. See [AGENTS.md](AGENTS.md) for the full architecture and coding guidelines.
+`JalaTax.Core` must not depend on the Windows Forms or console applications. See [AGENTS.md](AGENTS.md) for the full architecture and coding guidelines.
 
 ## Prerequisites
 
@@ -149,20 +153,90 @@ From the repository root:
 ```powershell
 dotnet restore
 dotnet build
-dotnet run --project src/JalaTax.Console
 ```
 
-Expected output while the project is a scaffold:
+### Desktop application (Windows)
+
+```powershell
+dotnet run --project src/JalaTax.WinForms
+```
+
+1. Pick an example case (`DEMO-001` to `DEMO-003`), or type a taxpayer ID, annual income and deductions.
+2. Press **Calculate** (or Enter).
+3. The **Result** panel shows the amounts and the tax per bracket. The **Audit trail** lists every processing step. Invalid input is marked next to the field, with the message below the buttons.
+
+Amounts can be typed in your regional format (for example `45000,50` with Finnish settings). Results always use the same format as the console (`45,000.50`).
+
+![Calculated case DEMO-001](docs/screenshots/calculation-demo-001.png)
+
+| Top bracket (DEMO-002) | Validation error (DEMO-003) |
+|---|---|
+| ![DEMO-002](docs/screenshots/calculation-demo-002.png) | ![DEMO-003](docs/screenshots/validation-demo-003.png) |
+
+**About** shows the application version:
+
+![About dialog](docs/screenshots/about-dialog.png)
+
+The desktop app needs Windows. The rest of the solution builds and runs on any platform.
+
+### Console runner
+
+```powershell
+dotnet run --project src/JalaTax.Console
+dotnet run --project src/JalaTax.Console -- path\to\cases.json
+```
+
+The runner processes `data/example-taxpayer.json`, or the file given as an argument:
 
 ```text
-JalaTax
+JalaTax 1.0.0
 ----------------------------------------
-Demo scaffold. Tax rules are not implemented yet.
+
+Processing case: DEMO-001
+
+Validation
+✓ Income and deductions validated
+
+Rules
+✓ Deductions applied: taxable income 39,500.00 (income 45,000.00 − deductions 2,500.00 − basic deduction 3,000.00, not below 0.00)
+✓ Tax bracket 0.00–20,000.00 at 10 %: 20,000.00 taxed, tax 2,000.00
+✓ Tax bracket 20,000.00–50,000.00 at 20 %: 19,500.00 taxed, tax 3,900.00
+
+Result
+----------------------------------------
+Annual income:         45,000.00
+Deductions:             2,500.00
+Basic deduction:        3,000.00
+Taxable income:        39,500.00
+Calculated tax:         5,900.00
+
+...
+
+Processing case: DEMO-003
+
+Validation
+✗ Deductions must not be negative.
+
+Case rejected. No tax calculated.
+
+----------------------------------------
+Processed 3 cases: 2 calculated, 1 rejected.
+Demo calculation completed.
 ```
 
-In Visual Studio, open `JalaTax.sln`, set **JalaTax.Console** as the startup project and press **F5**.
+Exit codes:
 
-In Visual Studio Code, install the recommended extensions when prompted (C# and EditorConfig), then press **F5**. The `JalaTax.Console` launch configuration builds the solution and runs the app in the integrated terminal, so breakpoints work. **Terminal → Run Task** also offers `build`, `test` and `format`. VB.NET debugging works in VS Code, but editor features such as IntelliSense are more limited than in Visual Studio.
+| Code | Meaning |
+|---|---|
+| 0 | Success. Rejected cases are part of normal output. |
+| 1 | Configuration error |
+| 2 | Input file error |
+| 3 | Unexpected error |
+
+### IDEs
+
+- **Visual Studio:** open `JalaTax.sln`, set **JalaTax.WinForms** (or **JalaTax.Console**) as the startup project and press **F5**. The form can be edited in the Windows Forms designer.
+- **Visual Studio Code:** install the recommended extensions when prompted (C# and EditorConfig), choose the **JalaTax.WinForms** or **JalaTax.Console** launch configuration and press **F5**. Breakpoints work. **Terminal → Run Task** also offers `build`, `test` and `format`. VS Code can't edit forms visually, and its VB.NET editor support is more limited than Visual Studio's.
 
 ## Run tests
 
@@ -197,6 +271,10 @@ To fix formatting and code style issues automatically:
 ```powershell
 dotnet format
 ```
+
+## Versioning
+
+The version is set once, in `Directory.Build.props` (`<Version>1.0.0</Version>`), and every project uses it. The desktop app's **About** dialog and the console header (`JalaTax 1.0.0`) read it through `ApplicationInfo.Version` in `JalaTax.Core`. To release a new version, update that value, following [semantic versioning](https://semver.org/) (major.minor.patch).
 
 ## Contributing
 
