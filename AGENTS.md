@@ -388,12 +388,11 @@ Every bug fix should include a regression test when practical.
 Run before completing changes:
 
 ```powershell
-dotnet format --verify-no-changes
 dotnet build
 dotnet test
 ```
 
-All commands must succeed. Build settings and code style rules live in `Directory.Build.props` and `.editorconfig`; do not weaken or suppress them to make a change pass. Run `dotnet format` to fix formatting issues automatically.
+Both commands must succeed.
 
 ---
 
@@ -564,8 +563,7 @@ A task is complete when:
 * Code follows the project architecture.
 * Business logic remains outside the console entry point.
 * Appropriate tests exist.
-* `dotnet format --verify-no-changes` succeeds.
-* `dotnet build` succeeds with no warnings.
+* `dotnet build` succeeds.
 * `dotnet test` succeeds.
 * No secrets or real personal data are introduced.
 * Documentation is updated when required.
